@@ -11,22 +11,18 @@ public class Particle {
 
     private Point<BigDecimal> position;
 
-    private final Double radius;
-
     private BigDecimal speed;
 
     private final Double mass;
 
     private BigDecimal angle;
 
-    public Particle(int id, BigDecimal x, BigDecimal y, BigDecimal speed, BigDecimal angle, double radius,
-                    Double mass) {
+    public Particle(int id, BigDecimal x, BigDecimal y, BigDecimal speed, BigDecimal angle, Double mass) {
         position = new Point<>(x, y);
 
         this.id = id;
         this.speed = speed;
         this.angle = angle;
-        this.radius = radius;
         this.mass = mass;
     }
 
@@ -34,12 +30,8 @@ public class Particle {
         return position;
     }
 
-    public Point<Double> getDoublePosition(){
+    public Point<Double> getDoublePosition() {
         return new Point<>(position.getX().doubleValue(), position.getY().doubleValue());
-    }
-
-    public Double getRadius() {
-        return radius;
     }
 
     public BigDecimal getAngle() {
@@ -86,7 +78,7 @@ public class Particle {
 
     public double getDistance(final Particle p) {
         return Math.sqrt(Math.pow(position.getX().subtract(p.position.getX()).doubleValue(), 2)
-                + Math.pow(position.getY().subtract(p.position.getY()).doubleValue(), 2)) - (radius + p.radius);
+                + Math.pow(position.getY().subtract(p.position.getY()).doubleValue(), 2));
     }
 
     @Override
@@ -94,7 +86,6 @@ public class Particle {
         return "Particle{" +
                 "id=" + id +
                 ", position=" + position +
-                ", radius=" + radius +
                 '}';
     }
 
@@ -105,7 +96,7 @@ public class Particle {
         final Particle p = (Particle) obj;
 
         return id.equals(p.id) && position.equals(p.position) && speed.equals(p.speed) && angle.equals(p.angle)
-                && radius.equals(p.radius) && mass.equals(p.mass);
+                && mass.equals(p.mass);
     }
 
     @Override
@@ -116,7 +107,6 @@ public class Particle {
         result = 19 * result + position.hashCode();
         result = 19 * result + speed.hashCode();
         result = 19 * result + angle.hashCode();
-        result = 19 * result + radius.hashCode();
         result = 19 * result + mass.hashCode();
 
         return result;

@@ -1,4 +1,4 @@
-package ar.edu.itba.ss.Schemas;
+package ar.edu.itba.ss.schemas;
 
 import ar.edu.itba.ss.entities.Oscillator;
 import ar.edu.itba.ss.entities.Particle;
@@ -15,7 +15,7 @@ public class Beeman {
         this.oscillator = oscillator;
     }
 
-    public void updateParticleBeeman() {
+    public void updateParticle() {
         final Particle particle = oscillator.getParticle();
         final double dt = oscillator.getDt();
 

@@ -1,6 +1,6 @@
-package ar.edu.itba.ss.Schemas;
+package ar.edu.itba.ss.schemas;
 
-public class AnaliticSolution {
+public class Analytic {
 
     private double initialPosition;
 
@@ -10,7 +10,7 @@ public class AnaliticSolution {
 
     private double particleMass;
 
-    public AnaliticSolution(double initialPosition, double gamma, double k, double particleMass) {
+    public Analytic(double initialPosition, double gamma, double k, double particleMass) {
         this.initialPosition = initialPosition;
         this.gamma = gamma;
         this.k = k;

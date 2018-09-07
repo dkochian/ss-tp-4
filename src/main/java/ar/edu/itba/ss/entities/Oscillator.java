@@ -8,15 +8,15 @@ public class Oscillator {
     private final double m;
     private final double dt;
     private final double gamma;
-    private final double tFinal;
+    private final double duration;
     private final Particle particle;
 
-    public Oscillator(double k, double m, double dt, double gamma, double tFinal, Particle particle) {
+    public Oscillator(double k, double m, double dt, double gamma, double duration, Particle particle) {
         this.k = k;
         this.m = m;
         this.dt = dt;
         this.gamma = gamma;
-        this.tFinal = tFinal;
+        this.duration = duration;
         this.particle = particle;
     }
 
@@ -36,8 +36,8 @@ public class Oscillator {
         return gamma;
     }
 
-    public double gettFinal() {
-        return tFinal;
+    public double getDuration() {
+        return duration;
     }
 
     public Particle getParticle() {
