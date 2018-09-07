@@ -1,4 +1,4 @@
-package ar.edu.itba.ss;
+package ar.edu.itba.ss.Schemas;
 
 public class AnaliticSolution {
 
