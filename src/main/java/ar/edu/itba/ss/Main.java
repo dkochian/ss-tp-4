@@ -7,7 +7,7 @@ import ar.edu.itba.ss.managers.IOManager;
 import ar.edu.itba.ss.managers.InjectorManager;
 import ar.edu.itba.ss.schemas.Analytic;
 import ar.edu.itba.ss.schemas.Beeman;
-import ar.edu.itba.ss.utils.other.Point;
+import ar.edu.itba.ss.schemas.Schema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,13 +24,18 @@ public class Main {
             switch (schema) {
                 case "Analytic":
                     analytic(configuration);
+                    logger.info("Analytic solution finished.");
                     break;
                 case "Beeman":
-                    beeman(configuration);
+                    schema(configuration.getDuration(), configuration.getDt(), new Beeman(createParticleAndOscillator(configuration)));
                     break;
                 case "Gear":
+                    //TODO: make Gear schema
+                    //schema(configuration.getDuration(), configuration.getDt(), new Gear(createParticleAndOscillator(configuration)));
                     break;
                 case "Verlet":
+                    //TODO: make Verlet schema
+                    //schema(configuration.getDuration(), configuration.getDt(), new Verlet(createParticleAndOscillator(configuration)));
                     break;
                 default:
                     throw new IllegalArgumentException("No schema found by " + schema);
@@ -38,24 +43,7 @@ public class Main {
         }
     }
 
-    static void beeman(final Configuration configuration) {
-        double x = configuration.getAmplitude();
-        double y = 0;
-        double v = (configuration.getAmplitude() * (-1) * configuration.getGamma()) / (2 * configuration.getM());
-        double angle = 0;
-        Particle particle = new Particle(1, new BigDecimal(x), new BigDecimal(y), new BigDecimal(v), new BigDecimal(angle), configuration.getM());
-        Oscillator oscillator = new Oscillator(configuration.getK(), configuration.getM(), configuration.getDt(),
-                configuration.getGamma(), configuration.getDuration(), particle);
-
-        Beeman beeman = new Beeman(oscillator);
-
-        for (double t = 0; t < configuration.getDuration(); t += configuration.getDt()) {
-            beeman.updateParticle();
-            System.out.println(t + "\t" + oscillator.getParticle());
-        }
-    }
-
-    static void analytic(final Configuration configuration) {
+    private static void analytic(final Configuration configuration) {
         double x = configuration.getAmplitude();
         double y = 0;
         double v = (configuration.getAmplitude() * (-1) * configuration.getGamma()) / (2 * configuration.getM());
@@ -68,5 +56,22 @@ public class Main {
             analytic.calculatePosition(t);
             System.out.println(t + "\t" + particle);
         }
+    }
+
+    private static void schema(final double duration, final double dt, final Schema schema) {
+        for (double t = 0; t < duration; t += dt) {
+            schema.updateParticle();
+            System.out.println(t + "\t" + schema.getParticle());
+        }
+    }
+
+    private static Oscillator createParticleAndOscillator(final Configuration configuration) {
+        double x = configuration.getAmplitude();
+        double y = 0;
+        double v = (configuration.getAmplitude() * (-1) * configuration.getGamma()) / (2 * configuration.getM());
+        double angle = 0;
+        Particle particle = new Particle(1, new BigDecimal(x), new BigDecimal(y), new BigDecimal(v), new BigDecimal(angle), configuration.getM());
+        return new Oscillator(configuration.getK(), configuration.getM(), configuration.getDt(),
+                configuration.getGamma(), configuration.getDuration(), particle);
     }
 }

@@ -2,12 +2,10 @@ package ar.edu.itba.ss.schemas;
 
 import ar.edu.itba.ss.entities.Oscillator;
 
-public class Verlet implements Schema{
+public class Verlet extends Schema{
 
-    private final Oscillator oscillator;
-
-    public Verlet(Oscillator oscillator) {
-        this.oscillator = oscillator;
+    public Verlet(final Oscillator oscillator) {
+        super(oscillator);
     }
 
     @Override

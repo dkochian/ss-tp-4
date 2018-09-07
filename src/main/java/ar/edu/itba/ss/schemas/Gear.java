@@ -2,16 +2,14 @@ package ar.edu.itba.ss.schemas;
 
 import ar.edu.itba.ss.entities.Oscillator;
 
-public class Gear implements Schema{
+public class Gear extends Schema{
 
-    private final Oscillator oscillator;
-
-    public Gear(Oscillator oscillator) {
-        this.oscillator = oscillator;
+    public Gear(final Oscillator oscillator) {
+        super(oscillator);
     }
 
     @Override
     public void updateParticle() {
-        
+
     }
 }
