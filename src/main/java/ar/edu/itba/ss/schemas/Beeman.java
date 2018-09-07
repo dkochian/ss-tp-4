@@ -4,7 +4,7 @@ import ar.edu.itba.ss.entities.Oscillator;
 import ar.edu.itba.ss.entities.Particle;
 import ar.edu.itba.ss.utils.other.Point;
 
-public class Beeman {
+public class Beeman implements Schema{
 
     private final Oscillator oscillator;
 
@@ -15,6 +15,7 @@ public class Beeman {
         this.oscillator = oscillator;
     }
 
+    @Override
     public void updateParticle() {
         final Particle particle = oscillator.getParticle();
         final double dt = oscillator.getDt();

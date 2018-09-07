@@ -5,7 +5,9 @@ import ar.edu.itba.ss.entities.Oscillator;
 import ar.edu.itba.ss.entities.Particle;
 import ar.edu.itba.ss.managers.IOManager;
 import ar.edu.itba.ss.managers.InjectorManager;
+import ar.edu.itba.ss.schemas.Analytic;
 import ar.edu.itba.ss.schemas.Beeman;
+import ar.edu.itba.ss.utils.other.Point;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +23,7 @@ public class Main {
         for (String schema : configuration.getSchemas()) {
             switch (schema) {
                 case "Analytic":
+                    analytic(configuration);
                     break;
                 case "Beeman":
                     beeman(configuration);
@@ -35,7 +38,7 @@ public class Main {
         }
     }
 
-    public static void beeman(final Configuration configuration) {
+    static void beeman(final Configuration configuration) {
         double x = configuration.getAmplitude();
         double y = 0;
         double v = (configuration.getAmplitude() * (-1) * configuration.getGamma()) / (2 * configuration.getM());
@@ -45,9 +48,25 @@ public class Main {
                 configuration.getGamma(), configuration.getDuration(), particle);
 
         Beeman beeman = new Beeman(oscillator);
-        for (double t = 0; t < configuration.getDuration(); t+= configuration.getDt()) {
+
+        for (double t = 0; t < configuration.getDuration(); t += configuration.getDt()) {
             beeman.updateParticle();
             System.out.println(t + "\t" + oscillator.getParticle());
+        }
+    }
+
+    static void analytic(final Configuration configuration) {
+        double x = configuration.getAmplitude();
+        double y = 0;
+        double v = (configuration.getAmplitude() * (-1) * configuration.getGamma()) / (2 * configuration.getM());
+        double angle = 0;
+        Particle particle = new Particle(1, new BigDecimal(x), new BigDecimal(y), new BigDecimal(v), new BigDecimal(angle), configuration.getM());
+
+        Analytic analytic = new Analytic(configuration.getAmplitude(), configuration.getGamma(), configuration.getK(), particle);
+
+        for (double t = 0; t < configuration.getDuration(); t += configuration.getDt()) {
+            analytic.calculatePosition(t);
+            System.out.println(t + "\t" + particle);
         }
     }
 }

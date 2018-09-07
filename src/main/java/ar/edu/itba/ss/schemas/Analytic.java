@@ -1,24 +1,30 @@
 package ar.edu.itba.ss.schemas;
 
+import ar.edu.itba.ss.entities.Particle;
+import ar.edu.itba.ss.utils.other.Point;
+
 public class Analytic {
 
-    private double initialPosition;
+    private double amplitude;
 
     private double gamma;
 
     private double k;
 
-    private double particleMass;
+    private Particle particle;
 
-    public Analytic(double initialPosition, double gamma, double k, double particleMass) {
-        this.initialPosition = initialPosition;
+    public Analytic(double amplitude, double gamma, double k, Particle particle) {
+        this.amplitude = amplitude;
         this.gamma = gamma;
         this.k = k;
-        this.particleMass = particleMass;
+        this.particle = particle;
     }
 
-    public double calculatePosition(double time) {
-        return initialPosition * Math.exp((-gamma /(2*particleMass)) * time)
-                * Math.cos(Math.sqrt(k/particleMass - Math.pow(gamma, 2)/(4*Math.pow(particleMass, 2))) * time);
+    public void calculatePosition(double time) {
+        particle.updatePosition(new Point<>(
+                amplitude * Math.exp((-gamma / (2 * particle.getMass())) * time)
+                        * Math.cos(Math.sqrt(k / particle.getMass() - Math.pow(gamma, 2) / (4 * Math.pow(particle.getMass(), 2))) * time),
+                0.0
+        ));
     }
 }
