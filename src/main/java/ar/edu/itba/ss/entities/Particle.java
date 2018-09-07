@@ -4,8 +4,6 @@ import ar.edu.itba.ss.utils.other.Point;
 import ar.edu.itba.ss.utils.other.Rounding;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
 
 public class Particle {
 
@@ -76,16 +74,12 @@ public class Particle {
         this.position = new Point<>(new BigDecimal(position.getX()), new BigDecimal(position.getY()));
     }
 
-    public void update(final double t, final double limit) {
+    public void update(final double t) {
         //Update position
         BigDecimal newX = position.getX().add(speed.multiply(new BigDecimal(Math.cos(angle.doubleValue())))
                 .multiply(new BigDecimal(t))).setScale(Rounding.SCALE, Rounding.ROUNDING_MODE_UP);
         BigDecimal newY = position.getY().add(speed.multiply(new BigDecimal(Math.sin(angle.doubleValue())))
                 .multiply(new BigDecimal(t))).setScale(Rounding.SCALE, Rounding.ROUNDING_MODE_UP);
-
-        if(newX.doubleValue() > limit || newX.doubleValue() < 0 || newY.doubleValue() > limit || newY.doubleValue() < 0)
-            angle = angle.add(new BigDecimal(Math.PI));
-
 
         position = new Point<>(newX, newY);
     }
