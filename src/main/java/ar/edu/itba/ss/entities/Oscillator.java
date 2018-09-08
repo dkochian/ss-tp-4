@@ -2,8 +2,6 @@ package ar.edu.itba.ss.entities;
 
 public class Oscillator {
 
-
-
     private final double k;
     private final double m;
     private final double dt;

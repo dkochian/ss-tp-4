@@ -5,10 +5,7 @@ import ar.edu.itba.ss.entities.Oscillator;
 import ar.edu.itba.ss.entities.Particle;
 import ar.edu.itba.ss.managers.IOManager;
 import ar.edu.itba.ss.managers.InjectorManager;
-import ar.edu.itba.ss.schemas.Analytic;
-import ar.edu.itba.ss.schemas.Beeman;
-import ar.edu.itba.ss.schemas.Schema;
-import ar.edu.itba.ss.schemas.Verlet;
+import ar.edu.itba.ss.schemas.*;
 import ar.edu.itba.ss.utils.io.OutputWriter;
 import ar.edu.itba.ss.utils.other.Point;
 import ar.edu.itba.ss.utils.other.Rounding;
@@ -64,7 +61,7 @@ public class Main {
                     logger.info("Beeman solution finished.");
                     break;
                 case "Gear":
-                    /*try {
+                    try {
                         gearPoints = schemaRun(configuration, new Gear(createParticleAndOscillator(configuration)));
 
                         if (gearPoints != null)
@@ -73,7 +70,7 @@ public class Main {
                     } catch (IOException e) {
                         logger.error("Could not write " + schema + " points file.");
                     }
-                    logger.info("Gear solution finished.");*/
+                    logger.info("Gear solution finished.");
                     break;
                 case "Verlet":
                     try {
@@ -173,7 +170,7 @@ public class Main {
 
         double sum = 0.0;
         for (int i = 0; i < schemasResults.size(); i++) {
-            sum += Math.sqrt(Math.abs(analytic.get(i).getX() - schemasResults.get(i).getX()));
+            sum += Math.pow(Math.abs(analytic.get(i).getX() - schemasResults.get(i).getX()), 2);
         }
 
         return sum / analytic.size();
