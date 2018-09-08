@@ -3,7 +3,6 @@ package ar.edu.itba.ss.entities;
 public class Configuration {
     //General
     private final String outputDirectory;
-    private final String outputFileName;
 
     //Oscillator
     private final double k;
@@ -16,25 +15,25 @@ public class Configuration {
     //schemas
     private final String[] schemas;
 
-    Configuration(String outputDirectory, String outputFileName, double k, double m, double dt, double gamma,
-                         double duration, double amplitude, String[] schemas) {
+    //Print Time
+    private final double printT;
+
+    Configuration(String outputDirectory, double k, double m, double dt, double gamma,
+                         double duration, double amplitude, double printT, String[] schemas) {
         this.outputDirectory = outputDirectory;
-        this.outputFileName = outputFileName;
         this.k = k;
         this.m = m;
         this.dt = dt;
         this.gamma = gamma;
         this.duration = duration;
         this.amplitude = amplitude;
+        this.printT = printT;
         this.schemas = schemas;
+
     }
 
     public String getOutputDirectory() {
         return outputDirectory;
-    }
-
-    public String getOutputFileName() {
-        return outputFileName;
     }
 
     public double getK() {
@@ -65,23 +64,29 @@ public class Configuration {
         return schemas;
     }
 
+    public double getPrintT() {
+        return printT;
+    }
+
     public static Configuration getDefault() {
         //General
         final String outputDirectory = "output";
-        final String outputFileName = "output.tsv";
 
         //Oscillator
         final double k = Math.pow(10, 4);
         final double m = 70.0;
-        final double dt = 0.01;
+        final double dt = 0.0001;
         final double gamma = 100.0;
         final double duration = 5.0;
         final double amplitude = 1.0;
 
+        //Print Time
+        final double printT = 0.05;
+
         //schemas
         final String[] schemas = new String[]{"Analytic", "Beeman", "Gear", "Verlet"};
 
-        return new Configuration(outputDirectory, outputFileName, k, m, dt, gamma, duration, amplitude, schemas);
+        return new Configuration(outputDirectory, k, m, dt, gamma, duration, amplitude, printT, schemas);
     }
 
 }

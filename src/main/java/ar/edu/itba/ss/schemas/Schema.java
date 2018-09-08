@@ -2,6 +2,7 @@ package ar.edu.itba.ss.schemas;
 
 import ar.edu.itba.ss.entities.Oscillator;
 import ar.edu.itba.ss.entities.Particle;
+import ar.edu.itba.ss.utils.other.Point;
 
 public abstract class Schema {
 
@@ -22,5 +23,5 @@ public abstract class Schema {
     /**
      * This function will update particles position and velocity
      */
-    public abstract void updateParticle();
+    public abstract Point<Double> updateParticle();
 }

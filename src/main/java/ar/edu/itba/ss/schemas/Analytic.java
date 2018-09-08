@@ -20,11 +20,13 @@ public class Analytic {
         this.particle = particle;
     }
 
-    public void calculatePosition(double time) {
+    public Point<Double> calculatePosition(double time) {
         particle.updatePosition(new Point<>(
                 amplitude * Math.exp((-gamma / (2 * particle.getMass())) * time)
                         * Math.cos(Math.sqrt(k / particle.getMass() - Math.pow(gamma, 2) / (4 * Math.pow(particle.getMass(), 2))) * time),
                 0.0
         ));
+
+        return particle.getDoublePosition();
     }
 }

@@ -14,7 +14,7 @@ public class Beeman extends Schema{
     }
 
     @Override
-    public void updateParticle() {
+    public Point<Double> updateParticle() {
         final Particle particle = getOscillator().getParticle();
         final double dt = getOscillator().getDt();
 
@@ -24,8 +24,8 @@ public class Beeman extends Schema{
         double xActualAcceleration = getOscillator().getXAcceleration();
         double yActualAcceleration = getOscillator().getYAcceleration();
 
-        double newXPosition = particlePosition.getX() + (dt * particleVelocity.getX()) + (2 / 3.0) * xActualAcceleration * (dt * dt) - (1.0 / 6) * xPreviousAcceleration * (dt * dt);
-        double newYPosition = particlePosition.getY() + (dt * particleVelocity.getY()) + (2 / 3.0) * yActualAcceleration * (dt * dt) - (1.0 / 6) * yPreviousAcceleration * (dt * dt);
+        double newXPosition = particlePosition.getX() + (dt * particleVelocity.getX()) + (2 / 3.0) * xActualAcceleration * Math.pow(dt,2) - (1.0 / 6) * xPreviousAcceleration * Math.pow(dt,2);
+        double newYPosition = particlePosition.getY() + (dt * particleVelocity.getY()) + (2 / 3.0) * yActualAcceleration * Math.pow(dt,2) - (1.0 / 6) * yPreviousAcceleration * Math.pow(dt,2);
 
         double xVelocityP = particleVelocity.getX() + (3 / 2.0) * xActualAcceleration * dt - (1 / 2.0) * xPreviousAcceleration * dt;
         double yVelocityP = particleVelocity.getY() + (3 / 2.0) * xActualAcceleration * dt - (1 / 2.0) * yPreviousAcceleration * dt;
@@ -44,5 +44,6 @@ public class Beeman extends Schema{
         xPreviousAcceleration = xActualAcceleration;
         yPreviousAcceleration = yActualAcceleration;
 
+        return particle.getDoublePosition();
     }
 }
