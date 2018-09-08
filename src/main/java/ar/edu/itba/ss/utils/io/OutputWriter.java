@@ -16,7 +16,7 @@ import java.util.List;
 public class OutputWriter {
 
     private final String outputDirectory;
-    private final String pathQuadraticError;
+    private final String pathMeanSquaredError;
     private final BigDecimal printT;
 
     @Inject
@@ -24,7 +24,7 @@ public class OutputWriter {
         final Configuration configuration = ioManager.getConfiguration();
         this.printT = new BigDecimal(ioManager.getConfiguration().getPrintT());
         this.outputDirectory = configuration.getOutputDirectory();
-        this.pathQuadraticError = configuration.getOutputDirectory() + '/' + "Quadratic Error.txt";
+        this.pathMeanSquaredError = configuration.getOutputDirectory() + '/' + "Mean Squared Error.txt";
 
         final File file = new File(configuration.getOutputDirectory());
         if (!file.exists())
@@ -71,6 +71,29 @@ public class OutputWriter {
                         .append("\r\n");
 
                 auxTime = auxTime.add(printT);
+            }
+
+            printWriter.flush();
+        }
+    }
+
+    public void writeMSE(final double[] mse, final String[] schema) throws IOException {
+        final Path p = Paths.get(pathMeanSquaredError);
+
+        if (Files.exists(p))
+            Files.delete(p);
+
+
+        try (final PrintWriter printWriter = new PrintWriter(new BufferedWriter(new FileWriter(pathMeanSquaredError, true)))) {
+            printWriter
+                    .append("Mean Squared Error")
+                    .append("\r\n");
+            for (int i = 0; i < mse.length; i++) {
+                printWriter
+                        .append(schema[i + 1])
+                        .append("\t")
+                        .append(String.valueOf(mse[i]))
+                        .append("\r\n");
             }
 
             printWriter.flush();

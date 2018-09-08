@@ -28,13 +28,24 @@ public class Main {
         final OutputWriter outputWriter = InjectorManager.getInjector().getInstance(OutputWriter.class);
         final Configuration configuration = ioManager.getConfiguration();
 
-        configuration.getPrintT();
+        List<Point<Double>> analyticPoints = null;
+        List<Point<Double>> beemanPoints = null;
+        List<Point<Double>> gearPoints = null;
+        List<Point<Double>> verletPoints = null;
 
         for (String schema : configuration.getSchemas()) {
             switch (schema) {
                 case "Analytic":
                     try {
-                        outputWriter.writeSchema(analytic(configuration), schema);
+                        analyticPoints = analytic(configuration);
+
+                        if (beemanPoints != analyticPoints)
+                            outputWriter.writeSchema(analyticPoints, schema);
+                        else {
+                            logger.error("Nothing to analyze.");
+                            return;
+                        }
+
                     } catch (IOException e) {
                         logger.error("Could not write " + schema + " points file.");
                     }
@@ -42,18 +53,23 @@ public class Main {
                     break;
                 case "Beeman":
                     try {
-                        outputWriter.writeSchema(schema(configuration,
-                                new Beeman(createParticleAndOscillator(configuration))), schema);
+                        beemanPoints = schemaRun(configuration, new Beeman(createParticleAndOscillator(configuration)));
+
+                        if (beemanPoints != null)
+                            outputWriter.writeSchema(beemanPoints, schema);
+
                     } catch (IOException e) {
                         logger.error("Could not write " + schema + " points file.");
                     }
                     logger.info("Beeman solution finished.");
                     break;
                 case "Gear":
-                    //TODO: make Gear schema
                     /*try {
-                        outputWriter.writeSchema(schema(configuration.getDuration(), configuration.getDt(),
-                                new Gear(createParticleAndOscillator(configuration))), schema);
+                        gearPoints = schemaRun(configuration, new Gear(createParticleAndOscillator(configuration)));
+
+                        if (gearPoints != null)
+                            outputWriter.writeSchema(gearPoints, schema);
+
                     } catch (IOException e) {
                         logger.error("Could not write " + schema + " points file.");
                     }
@@ -61,8 +77,11 @@ public class Main {
                     break;
                 case "Verlet":
                     try {
-                        outputWriter.writeSchema(schema(configuration,
-                                new Verlet(createParticleAndOscillator(configuration))), schema);
+                        verletPoints = schemaRun(configuration, new Verlet(createParticleAndOscillator(configuration)));
+
+                        if (verletPoints != null)
+                            outputWriter.writeSchema(verletPoints, schema);
+
                     } catch (IOException e) {
                         logger.error("Could not write " + schema + " points file.");
                     }
@@ -71,6 +90,21 @@ public class Main {
                 default:
                     throw new IllegalArgumentException("No schema found by " + schema);
             }
+        }
+
+        double[] mse = new double[3];
+
+        if (analyticPoints != null && beemanPoints != null)
+            mse[0] = measure(analyticPoints, beemanPoints);
+        if (analyticPoints != null && gearPoints != null)
+            mse[1] = measure(analyticPoints, gearPoints);
+        if (analyticPoints != null && verletPoints != null)
+            mse[2] = measure(analyticPoints, verletPoints);
+
+        try {
+            outputWriter.writeMSE(mse, configuration.getSchemas());
+        } catch (IOException e) {
+            logger.error("Could not write to file the Mean Squared Error");
         }
     }
 
@@ -103,7 +137,7 @@ public class Main {
         return particlesPos;
     }
 
-    private static List<Point<Double>> schema(final Configuration configuration, final Schema schema) {
+    private static List<Point<Double>> schemaRun(final Configuration configuration, final Schema schema) {
         Point<Double> aux = null;
         BigDecimal auxTime = new BigDecimal(0.0);
         BigDecimal dt = new BigDecimal(configuration.getDt());
@@ -130,5 +164,18 @@ public class Main {
         Particle particle = new Particle(1, new BigDecimal(x), new BigDecimal(y), new BigDecimal(v), new BigDecimal(angle), configuration.getM());
         return new Oscillator(configuration.getK(), configuration.getM(), configuration.getDt(),
                 configuration.getGamma(), configuration.getDuration(), particle);
+    }
+
+    private static double measure(final List<Point<Double>> analytic, final List<Point<Double>> schemasResults) {
+        if (analytic.size() != schemasResults.size()) {
+            throw new IllegalArgumentException();
+        }
+
+        double sum = 0.0;
+        for (int i = 0; i < schemasResults.size(); i++) {
+            sum += Math.sqrt(Math.abs(analytic.get(i).getX() - schemasResults.get(i).getX()));
+        }
+
+        return sum / analytic.size();
     }
 }
