@@ -86,6 +86,21 @@ public class Configuration {
         //schemas
         final String[] schemas = new String[]{"Beeman", "Gear", "Verlet"};
 
+        //Sun - Mass, Radius, Xo, Yo, VXo, VYo
+        final String[] sun = new String[]{};
+
+        //Earth
+        final String[] earth = new String[]{};
+
+        //Jupiter
+        final String[] jupiter = new String[]{};
+
+        //Saturn
+        final String[] saturn = new String[]{};
+
+        //Ship - Mass,
+        final String[] ship = new String[]{};
+
         return new Configuration(outputDirectory, k, m, dt, gamma, duration, amplitude, printT, schemas);
     }
 
