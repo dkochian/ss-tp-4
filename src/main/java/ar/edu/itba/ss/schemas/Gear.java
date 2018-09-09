@@ -56,9 +56,6 @@ public class Gear extends Schema {
                 r3.getY() + r4.getY() * dt + r5.getY() * Math.pow(dt, 2)/2);
         r4 = new Point<>(r4.getX() + r5.getX() * dt, r4.getY() + r5.getY() * dt);
 
-        r5 = new Point<>((-getOscillator().getK() / getOscillator().getParticle().getMass()) * r3.getX(),
-                (-getOscillator().getK() / getOscillator().getParticle().getMass()) * r3.getY());
-
         // evaluate
 
         double xDeltaAcceleration = getOscillator().getXAcceleration() - xActualAcceleration;
@@ -83,11 +80,11 @@ public class Gear extends Schema {
         r3 = new Point<>(r3.getX() + (11/18) * xDeltaR2 * 6 / Math.pow(dt, 3),
                 r3.getY() + (11/18) * yDeltaR2 * 2 / Math.pow(dt, 3));
 
-        r4 = new Point<>(r3.getX() + (1/6) * xDeltaR2 * 24 / Math.pow(dt, 4),
-                r3.getY() + (1/6) * yDeltaR2 * 24 / Math.pow(dt, 4));
+        r4 = new Point<>(r4.getX() + (1/6) * xDeltaR2 * 24 / Math.pow(dt, 4),
+                r4.getY() + (1/6) * yDeltaR2 * 24 / Math.pow(dt, 4));
 
-        r5 = new Point<>(r3.getX() + (1/60) * xDeltaR2 * 120 / Math.pow(dt, 5),
-                r3.getY() + (1/60) * yDeltaR2 * 120 / Math.pow(dt, 5));
+        r5 = new Point<>(r5.getX() + (1/60) * xDeltaR2 * 120 / Math.pow(dt, 5),
+                r5.getY() + (1/60) * yDeltaR2 * 120 / Math.pow(dt, 5));
 
         particle.updatePosition(new Point<>(newXPosition, newYPosition));
         particle.updateVelocity(new Point<>(newXVelocity, newYVelocity));
