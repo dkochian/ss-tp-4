@@ -84,7 +84,7 @@ public class Configuration {
         final double printT = 0.05;
 
         //schemas
-        final String[] schemas = new String[]{"Analytic", "Beeman", "Gear", "Verlet"};
+        final String[] schemas = new String[]{"Beeman", "Gear", "Verlet"};
 
         return new Configuration(outputDirectory, k, m, dt, gamma, duration, amplitude, printT, schemas);
     }
