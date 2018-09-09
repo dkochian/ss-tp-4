@@ -28,16 +28,16 @@ public class Beeman extends Schema{
         double newYPosition = particlePosition.getY() + (dt * particleVelocity.getY()) + (2 / 3.0) * yActualAcceleration * Math.pow(dt,2) - (1.0 / 6) * yPreviousAcceleration * Math.pow(dt,2);
 
         double xVelocityP = particleVelocity.getX() + (3 / 2.0) * xActualAcceleration * dt - (1 / 2.0) * xPreviousAcceleration * dt;
-        double yVelocityP = particleVelocity.getY() + (3 / 2.0) * xActualAcceleration * dt - (1 / 2.0) * yPreviousAcceleration * dt;
+        double yVelocityP = particleVelocity.getY() + (3 / 2.0) * yActualAcceleration * dt - (1 / 2.0) * yPreviousAcceleration * dt;
 
         particle.updatePosition(new Point<>(newXPosition, newYPosition));
         particle.updateVelocity(new Point<>(xVelocityP, yVelocityP));
 
-        xActualAcceleration = getOscillator().getXAcceleration();
-        yActualAcceleration = getOscillator().getYAcceleration();
+        double xActualAcceleration2 = getOscillator().getXAcceleration();
+        double yActualAcceleration2 = getOscillator().getYAcceleration();
 
-        double correctedXVelocity = particleVelocity.getX() + (1 / 3.0) * xActualAcceleration * dt + (5 / 6.0) * xActualAcceleration * dt - (1 / 6.0) * xPreviousAcceleration * dt;
-        double correctedYVelocity = particleVelocity.getY() + (1 / 3.0) * yActualAcceleration * dt + (5 / 6.0) * yActualAcceleration * dt - (1 / 6.0) * yPreviousAcceleration * dt;
+        double correctedXVelocity = particleVelocity.getX() + (1 / 3.0) * xActualAcceleration2 * dt + (5 / 6.0) * xActualAcceleration * dt - (1 / 6.0) * xPreviousAcceleration * dt;
+        double correctedYVelocity = particleVelocity.getY() + (1 / 3.0) * yActualAcceleration2 * dt + (5 / 6.0) * yActualAcceleration * dt - (1 / 6.0) * yPreviousAcceleration * dt;
 
         particle.updateVelocity(new Point<>(correctedXVelocity, correctedYVelocity));
 
