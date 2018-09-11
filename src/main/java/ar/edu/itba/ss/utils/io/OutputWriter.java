@@ -17,13 +17,13 @@ public class OutputWriter {
 
     private final String outputDirectory;
     private final String pathMeanSquaredError;
-    private final Double printT;
+    private final BigDecimal printT;
     private final Double duration;
 
     @Inject
     public OutputWriter(final IOManager ioManager) {
         final Configuration configuration = ioManager.getConfiguration();
-        this.printT = ioManager.getConfiguration().getPrintT();
+        this.printT = new BigDecimal(ioManager.getConfiguration().getPrintT());
         this.outputDirectory = configuration.getOutputDirectory();
         this.pathMeanSquaredError = configuration.getOutputDirectory() + '/' + "Mean Squared Error.txt";
         this.duration = configuration.getDuration();
@@ -62,18 +62,18 @@ public class OutputWriter {
 
 
         int elemIndex = 0;
-        int elemPrint = (int) (particlesPosX.size() * (printT/duration));
-        double currentTime = 0;
+        int elemPrint = (int) (particlesPosX.size() * (printT.doubleValue()/duration));
+        BigDecimal currentTime = new BigDecimal(0D);
 
         try (final PrintWriter printWriter = new PrintWriter(new BufferedWriter(new FileWriter(path, true)))) {
             for (Double particlePos : particlesPosX) {
                 if (elemIndex % elemPrint == 0) {
                     printWriter
-                            .append(String.valueOf(currentTime))
+                            .append(String.valueOf(currentTime.setScale(Rounding.SCALE, Rounding.ROUNDING_MODE_UP).doubleValue()))
                             .append("\t")
                             .append(String.valueOf(particlePos))
                             .append("\r\n");
-                    currentTime += printT;
+                    currentTime = currentTime.add(printT);
                 }
                 elemIndex++;
             }
