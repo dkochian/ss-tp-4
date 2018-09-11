@@ -33,7 +33,7 @@ public class OutputWriter {
 
     }
 
-    public void writeSchema(final List<Point<Double>> particlesPos, final String schema) throws IOException {
+    public void writeSchema(final List<Double> particlesPosX, final String schema) throws IOException {
         String path;
         BigDecimal auxTime = new BigDecimal(0.0);
 
@@ -61,13 +61,11 @@ public class OutputWriter {
 
 
         try (final PrintWriter printWriter = new PrintWriter(new BufferedWriter(new FileWriter(path, true)))) {
-            for (Point<Double> particlePos : particlesPos) {
+            for (Double particlePos : particlesPosX) {
                 printWriter
                         .append(String.valueOf(auxTime.setScale(Rounding.SCALE, Rounding.ROUNDING_MODE_UP).doubleValue()))
                         .append("\t")
-                        .append(String.valueOf(particlePos.getX()))
-                        .append("\t")
-                        .append(String.valueOf(particlePos.getY()))
+                        .append(String.valueOf(particlePos))
                         .append("\r\n");
 
                 auxTime = auxTime.add(printT);

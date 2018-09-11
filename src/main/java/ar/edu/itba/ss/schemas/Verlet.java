@@ -27,7 +27,6 @@ public class Verlet extends Schema{
         double newXPosition = particlePosition.getX() + dt * particleVelocity.getX() + (Math.pow(dt,2) * xActualAcceleration);
         double newYPosition = particlePosition.getY() + dt * particleVelocity.getY() + (Math.pow(dt,2) * yActualAcceleration);
 
-        //TODO: preguntar cual es a(t +dt) xq todavia no pude calcular la velocidad, solo hice update de la pos
         particle.updatePosition(new Point<>(newXPosition, newYPosition));
 
         double xNewAcceleration = getOscillator().getXAcceleration();

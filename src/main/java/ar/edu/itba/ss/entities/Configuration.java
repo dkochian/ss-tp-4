@@ -6,7 +6,7 @@ public class Configuration {
 
     //Oscillator
     private final double k;
-    private final double m;
+    private final double particleMass;
     private final double dt;
     private final double gamma;
     private final double duration;
@@ -18,11 +18,11 @@ public class Configuration {
     //Print Time
     private final double printT;
 
-    Configuration(String outputDirectory, double k, double m, double dt, double gamma,
+    Configuration(String outputDirectory, double k, double particleMass, double dt, double gamma,
                          double duration, double amplitude, double printT, String[] schemas) {
         this.outputDirectory = outputDirectory;
         this.k = k;
-        this.m = m;
+        this.particleMass = particleMass;
         this.dt = dt;
         this.gamma = gamma;
         this.duration = duration;
@@ -40,8 +40,8 @@ public class Configuration {
         return k;
     }
 
-    public double getM() {
-        return m;
+    public double getParticleMass() {
+        return particleMass;
     }
 
     public double getDt() {
@@ -74,7 +74,7 @@ public class Configuration {
 
         //Oscillator
         final double k = Math.pow(10, 4);
-        final double m = 70.0;
+        final double particleMass = 70.0;
         final double dt = 0.0001;
         final double gamma = 100.0;
         final double duration = 5.0;
@@ -86,7 +86,7 @@ public class Configuration {
         //schemas
         final String[] schemas = new String[]{"Analytic", "Beeman", "Gear", "Verlet"};
 
-        return new Configuration(outputDirectory, k, m, dt, gamma, duration, amplitude, printT, schemas);
+        return new Configuration(outputDirectory, k, particleMass, dt, gamma, duration, amplitude, printT, schemas);
     }
 
 }
