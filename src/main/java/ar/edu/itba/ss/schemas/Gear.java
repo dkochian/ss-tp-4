@@ -20,10 +20,14 @@ public class Gear extends Schema {
 
         xActualAcceleration = getOscillator().getXAcceleration();
         yActualAcceleration = getOscillator().getYAcceleration();
-        double coefficient = -getOscillator().getK() / getOscillator().getParticle().getMass();
-        r3 = new Point<>(coefficient * particleVelocity.getX(), coefficient * particleVelocity.getY());
-        r4 = new Point<>(coefficient * xActualAcceleration, coefficient * yActualAcceleration);
-        r5 = new Point<>(coefficient * r3.getX(), coefficient * r3.getY());
+        double coefficient1 = -getOscillator().getK() / getOscillator().getParticle().getMass();
+        double coefficient2 = getOscillator().getGamma() / getOscillator().getParticle().getMass();
+        r3 = new Point<>(coefficient1 * particleVelocity.getX() - coefficient2 * xActualAcceleration,
+                coefficient1 * particleVelocity.getY() - coefficient2 * yActualAcceleration);
+        r4 = new Point<>(coefficient1 * xActualAcceleration - coefficient2 * r3.getX(),
+                coefficient1 * yActualAcceleration - coefficient2 * r3.getY());
+        r5 = new Point<>(coefficient1 * r3.getX() - coefficient2 * r4.getX(),
+                coefficient1 * r3.getY() - coefficient2 * r4.getY());
     }
 
     @Override
@@ -65,8 +69,8 @@ public class Gear extends Schema {
         double yDeltaR2 = yDeltaAcceleration * Math.pow(dt, 2) / 2;
 
         // correct
-        newXPosition = newXPosition + (3 / 20.0) * xDeltaR2;
-        newYPosition = newYPosition + (3 / 20.0) * yDeltaR2;
+        newXPosition = newXPosition + (3 / 16.0) * xDeltaR2;
+        newYPosition = newYPosition + (3 / 16.0) * yDeltaR2;
 
         newXVelocity = newXVelocity + (251 / 360.0) * xDeltaR2 / dt;
         newYVelocity = newYVelocity + (251 / 360.0) * yDeltaR2 / dt;
@@ -80,8 +84,8 @@ public class Gear extends Schema {
         r4 = new Point<>(r4.getX() + (1 / 6.0) * xDeltaR2 * 24 / Math.pow(dt, 4),
                 r4.getY() + (1 / 6.0) * yDeltaR2 * 24 / Math.pow(dt, 4));
 
-        r5 = new Point<>(r5.getX() + (1 / 60) * xDeltaR2 * 120 / Math.pow(dt, 5),
-                r5.getY() + (1 / 60) * yDeltaR2 * 120 / Math.pow(dt, 5));
+        r5 = new Point<>(r5.getX() + (1 / 60.0) * xDeltaR2 * 120 / Math.pow(dt, 5),
+                r5.getY() + (1 / 60.0) * yDeltaR2 * 120 / Math.pow(dt, 5));
 
         particle.updatePosition(new Point<>(newXPosition, newYPosition));
         particle.updateVelocity(new Point<>(newXVelocity, newYVelocity));

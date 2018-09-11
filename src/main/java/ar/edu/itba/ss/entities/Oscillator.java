@@ -22,6 +22,8 @@ public class Oscillator {
         return dt;
     }
 
+    public double getGamma() { return gamma; }
+
     public Particle getParticle() {
         return particle;
     }

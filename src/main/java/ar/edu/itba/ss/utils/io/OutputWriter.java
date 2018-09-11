@@ -17,14 +17,16 @@ public class OutputWriter {
 
     private final String outputDirectory;
     private final String pathMeanSquaredError;
-    private final BigDecimal printT;
+    private final Double printT;
+    private final Double duration;
 
     @Inject
     public OutputWriter(final IOManager ioManager) {
         final Configuration configuration = ioManager.getConfiguration();
-        this.printT = new BigDecimal(ioManager.getConfiguration().getPrintT());
+        this.printT = ioManager.getConfiguration().getPrintT();
         this.outputDirectory = configuration.getOutputDirectory();
         this.pathMeanSquaredError = configuration.getOutputDirectory() + '/' + "Mean Squared Error.txt";
+        this.duration = configuration.getDuration();
 
         final File file = new File(configuration.getOutputDirectory());
         if (!file.exists())
@@ -35,7 +37,6 @@ public class OutputWriter {
 
     public void writeSchema(final List<Double> particlesPosX, final String schema) throws IOException {
         String path;
-        BigDecimal auxTime = new BigDecimal(0.0);
 
         switch (schema) {
             case "Analytic":
@@ -60,15 +61,21 @@ public class OutputWriter {
             Files.delete(p);
 
 
+        int elemIndex = 0;
+        int elemPrint = (int) (particlesPosX.size() * (printT/duration));
+        double currentTime = 0;
+
         try (final PrintWriter printWriter = new PrintWriter(new BufferedWriter(new FileWriter(path, true)))) {
             for (Double particlePos : particlesPosX) {
-                printWriter
-                        .append(String.valueOf(auxTime.setScale(Rounding.SCALE, Rounding.ROUNDING_MODE_UP).doubleValue()))
-                        .append("\t")
-                        .append(String.valueOf(particlePos))
-                        .append("\r\n");
-
-                auxTime = auxTime.add(printT);
+                if (elemIndex % elemPrint == 0) {
+                    printWriter
+                            .append(String.valueOf(currentTime))
+                            .append("\t")
+                            .append(String.valueOf(particlePos))
+                            .append("\r\n");
+                    currentTime += printT;
+                }
+                elemIndex++;
             }
 
             printWriter.flush();

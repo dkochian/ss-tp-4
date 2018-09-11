@@ -13,6 +13,8 @@ public class Particle {
 
     private BigDecimal speed;
 
+    private Point<BigDecimal> velocity;
+
     private final Double mass;
 
     private BigDecimal angle;
@@ -22,6 +24,8 @@ public class Particle {
 
         this.id = id;
         this.speed = speed;
+        this.velocity = new Point<>(speed.multiply(new BigDecimal(Math.cos(angle.doubleValue()))),
+                speed.multiply(new BigDecimal(Math.sin(angle.doubleValue()))));
         this.angle = angle;
         this.mass = mass;
     }
@@ -51,15 +55,11 @@ public class Particle {
     }
 
     public Point<Double> getVelocity() {
-        return new Point<>(speed.multiply(new BigDecimal(Math.cos(angle.doubleValue()))).doubleValue(),
-                speed.multiply(new BigDecimal(Math.sin(angle.doubleValue()))).doubleValue());
+        return new Point<>(velocity.getX().doubleValue(), velocity.getY().doubleValue());
     }
 
     public void updateVelocity(final Point<Double> velocity) {
-        speed = new BigDecimal(Math.sqrt(Math.pow(velocity.getX(), 2) + Math.pow(velocity.getY(), 2)))
-                .setScale(Rounding.SCALE, Rounding.ROUNDING_MODE_UP);
-        angle = new BigDecimal(Math.atan2(velocity.getY(), velocity.getX()))
-                .setScale(Rounding.SCALE, Rounding.ROUNDING_MODE_UP);
+        this.velocity = new Point<>(new BigDecimal(velocity.getX()), new BigDecimal(velocity.getY()));
     }
 
     public void updatePosition(final Point<Double> position) {
