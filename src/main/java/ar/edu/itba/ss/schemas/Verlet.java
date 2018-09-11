@@ -27,13 +27,17 @@ public class Verlet extends Schema{
         double newXPosition = particlePosition.getX() + dt * particleVelocity.getX() + (Math.pow(dt,2) * xActualAcceleration);
         double newYPosition = particlePosition.getY() + dt * particleVelocity.getY() + (Math.pow(dt,2) * yActualAcceleration);
 
+        double halfStepXVelocity = particleVelocity.getX() + xActualAcceleration * dt/2;
+        double halfStepYVelocity = particleVelocity.getY() + yActualAcceleration * dt/2;
+
         particle.updatePosition(new Point<>(newXPosition, newYPosition));
+        particle.updateVelocity(new Point<>(halfStepXVelocity, halfStepYVelocity));
 
         double xNewAcceleration = getOscillator().getXAcceleration();
         double yNewAcceleration = getOscillator().getYAcceleration();
 
-        double xVelocity = particleVelocity.getX() + xActualAcceleration * dt / 2 +  xNewAcceleration * dt /2;
-        double yVelocity = particleVelocity.getY() + yActualAcceleration * dt / 2 +  yNewAcceleration * dt /2;
+        double xVelocity = halfStepXVelocity + xNewAcceleration * dt/2;
+        double yVelocity = halfStepYVelocity + yNewAcceleration * dt/2;
 
         particle.updateVelocity(new Point<>(xVelocity, yVelocity));
 
