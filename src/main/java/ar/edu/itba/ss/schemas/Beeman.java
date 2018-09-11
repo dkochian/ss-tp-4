@@ -36,8 +36,6 @@ public class Beeman extends Schema{
         double xNewAcceleration = getOscillator().getXAcceleration();
         double yNewAcceleration = getOscillator().getYAcceleration();
 
-        particleVelocity = particle.getVelocity();
-
         double correctedXVelocity = particleVelocity.getX() + (1 / 3.0) * xNewAcceleration * dt + (5 / 6.0) * xActualAcceleration * dt - (1 / 6.0) * xPreviousAcceleration * dt;
         double correctedYVelocity = particleVelocity.getY() + (1 / 3.0) * yNewAcceleration * dt + (5 / 6.0) * yActualAcceleration * dt - (1 / 6.0) * yPreviousAcceleration * dt;
 
