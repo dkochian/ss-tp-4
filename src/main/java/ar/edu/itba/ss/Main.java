@@ -20,10 +20,12 @@ import java.util.List;
 public class Main {
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         final IOManager ioManager = InjectorManager.getInjector().getInstance(IOManager.class);
         final OutputWriter outputWriter = InjectorManager.getInjector().getInstance(OutputWriter.class);
         final Configuration configuration = ioManager.getConfiguration();
+
+        ioManager.getInputData();
 
         List<Point<Double>> beemanPoints;
         List<Point<Double>> gearPoints;

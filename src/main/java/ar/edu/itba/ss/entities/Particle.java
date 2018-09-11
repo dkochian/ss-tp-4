@@ -13,41 +13,21 @@ public class Particle {
 
     private BigDecimal speed;
 
-    private final Double mass;
-
     private BigDecimal angle;
 
-    public Particle(int id, BigDecimal x, BigDecimal y, BigDecimal speed, BigDecimal angle, Double mass) {
+    private final Double mass;
+
+    private final BigDecimal radius;
+
+    public Particle(int id, BigDecimal x, BigDecimal y, BigDecimal speed, BigDecimal angle, Double mass,
+                    BigDecimal radius) {
         position = new Point<>(x, y);
 
         this.id = id;
         this.speed = speed;
         this.angle = angle;
         this.mass = mass;
-    }
-
-    public Point<BigDecimal> getPosition() {
-        return position;
-    }
-
-    public Point<Double> getDoublePosition() {
-        return new Point<>(position.getX().doubleValue(), position.getY().doubleValue());
-    }
-
-    public BigDecimal getAngle() {
-        return angle;
-    }
-
-    public BigDecimal getSpeed() {
-        return speed;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public Double getMass() {
-        return mass;
+        this.radius = radius;
     }
 
     public Point<Double> getVelocity() {
@@ -110,6 +90,34 @@ public class Particle {
         result = 19 * result + mass.hashCode();
 
         return result;
+    }
+
+    public Point<BigDecimal> getPosition() {
+        return position;
+    }
+
+    public Point<Double> getDoublePosition() {
+        return new Point<>(position.getX().doubleValue(), position.getY().doubleValue());
+    }
+
+    public BigDecimal getAngle() {
+        return angle;
+    }
+
+    public BigDecimal getSpeed() {
+        return speed;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public Double getMass() {
+        return mass;
+    }
+
+    public BigDecimal getRadius() {
+        return radius;
     }
 
 }

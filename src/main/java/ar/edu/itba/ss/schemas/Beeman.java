@@ -1,7 +1,8 @@
 package ar.edu.itba.ss.schemas;
 
-import ar.edu.itba.ss.entities.Oscillator;
 import ar.edu.itba.ss.entities.Particle;
+import ar.edu.itba.ss.managers.IOManager;
+import ar.edu.itba.ss.managers.ParticleManager;
 import ar.edu.itba.ss.utils.other.Point;
 
 public class Beeman extends Schema{
@@ -9,13 +10,12 @@ public class Beeman extends Schema{
     private double xPreviousAcceleration = 0.0;
     private double yPreviousAcceleration = 0.0;
 
-    public Beeman(final Oscillator oscillator) {
-        super(oscillator);
+    public Beeman(final IOManager ioManager, final ParticleManager particleManager) {
+        super(particleManager);
     }
 
     @Override
-    public Point<Double> updateParticle() {
-        final Particle particle = getOscillator().getParticle();
+    public Point<Double> updateParticle(final Particle particle) {
         final double dt = getOscillator().getDt();
 
         final Point<Double> particlePosition = particle.getDoublePosition();

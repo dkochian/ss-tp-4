@@ -2,7 +2,9 @@ package ar.edu.itba.ss.entities;
 
 public class Configuration {
     //General
+    private final String inputDirectory;
     private final String outputDirectory;
+    private final String inputFileName;
 
     //Oscillator
     private final double k;
@@ -18,9 +20,11 @@ public class Configuration {
     //Print Time
     private final double printT;
 
-    Configuration(String outputDirectory, double k, double m, double dt, double gamma,
+    Configuration(String inputDirectory, String outputDirectory, String inputFileName, double k, double m, double dt, double gamma,
                          double duration, double amplitude, double printT, String[] schemas) {
+        this.inputDirectory = inputDirectory;
         this.outputDirectory = outputDirectory;
+        this.inputFileName = inputDirectory;
         this.k = k;
         this.m = m;
         this.dt = dt;
@@ -32,8 +36,16 @@ public class Configuration {
 
     }
 
+    public String getInputDirectory() {
+        return inputDirectory;
+    }
+
     public String getOutputDirectory() {
         return outputDirectory;
+    }
+
+    public String getInputFileName() {
+        return inputFileName;
     }
 
     public double getK() {
@@ -70,7 +82,9 @@ public class Configuration {
 
     public static Configuration getDefault() {
         //General
+        final String inputDirectory = "input";
         final String outputDirectory = "output";
+        final String inputFileName = "data.json";
 
         //Oscillator
         final double k = Math.pow(10, 4);
@@ -101,7 +115,7 @@ public class Configuration {
         //Ship - Mass,
         final String[] ship = new String[]{};
 
-        return new Configuration(outputDirectory, k, m, dt, gamma, duration, amplitude, printT, schemas);
+        return new Configuration(inputDirectory, outputDirectory, inputFileName, k, m, dt, gamma, duration, amplitude, printT, schemas);
     }
 
 }
