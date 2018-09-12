@@ -132,7 +132,11 @@ public class Main {
         BigDecimal dt = new BigDecimal(configuration.getDt());
         BigDecimal duration = new BigDecimal(configuration.getDuration());
         final List<Double> particlesPosX = new ArrayList<>();
-        for (BigDecimal t = new BigDecimal(0.0); t.compareTo(duration) < 0; t = t.add(dt)) {
+
+        //initial condition, amplitude
+        particlesPosX.add(1.00);
+
+        for (BigDecimal t = new BigDecimal(0.0).add(dt); t.compareTo(duration) < 0; t = t.add(dt)) {
             aux = schema.updateParticle();
             particlesPosX.add(aux.getX());
         }
@@ -158,7 +162,8 @@ public class Main {
         }
 
         double sum = 0.0;
-        for (int i = 0; i < schemasResults.size(); i++) {
+        //starting at i = 1 to ignore initial conditions (such conditions are independent from schemas)
+        for (int i = 1; i < schemasResults.size(); i++) {
             sum += Math.pow(Math.abs(analytic.get(i) - schemasResults.get(i)), 2);
         }
 
