@@ -167,6 +167,6 @@ public class Main {
             sum += Math.pow(Math.abs(analytic.get(i) - schemasResults.get(i)), 2);
         }
 
-        return sum / analytic.size();
+        return sum / (analytic.size() - 1);
     }
 }
