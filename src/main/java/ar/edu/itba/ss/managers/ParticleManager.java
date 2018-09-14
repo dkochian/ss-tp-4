@@ -1,6 +1,7 @@
 package ar.edu.itba.ss.managers;
 
 import ar.edu.itba.ss.entities.Particle;
+import ar.edu.itba.ss.utils.other.Point;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,12 +15,13 @@ public class ParticleManager {
         return particleList.add(p);
     }
 
-    public boolean removeParticle(final Particle p) {
-        return particleList.remove(p);
-    }
-
     public List<Particle> getParticleList() {
         return Collections.unmodifiableList(particleList);
     }
 
+    public void updateParticles(final Point<Double> forces) {
+        for (Particle particle : particleList)
+            particle.update(forces);
+
+    }
 }

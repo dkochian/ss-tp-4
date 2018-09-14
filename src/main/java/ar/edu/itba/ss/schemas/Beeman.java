@@ -1,49 +1,52 @@
 package ar.edu.itba.ss.schemas;
 
 import ar.edu.itba.ss.entities.Particle;
+import ar.edu.itba.ss.entities.State;
 import ar.edu.itba.ss.managers.IOManager;
 import ar.edu.itba.ss.managers.ParticleManager;
+import ar.edu.itba.ss.managers.SimulationManager;
 import ar.edu.itba.ss.utils.other.Point;
 
-public class Beeman extends Schema{
+import javax.inject.Inject;
 
-    private double xPreviousAcceleration = 0.0;
-    private double yPreviousAcceleration = 0.0;
+public class Beeman extends Schema {
 
+    @Inject
     public Beeman(final IOManager ioManager, final ParticleManager particleManager) {
-        super(particleManager);
+        super(ioManager, particleManager);
     }
 
     @Override
-    public Point<Double> updateParticle(final Particle particle) {
-        final double dt = getOscillator().getDt();
+    public void updateParticles() {
+        for (Particle particle : particleManager.getParticleList())
+            updateParticle(particle);
 
-        final Point<Double> particlePosition = particle.getDoublePosition();
-        final Point<Double> particleVelocity = particle.getVelocity();
+        for (Particle particle : particleManager.getParticleList()) {
+            particle.setPosition(states.get(particle).getPosition());
+            particle.setVelocity(states.get(particle).getVelocity());
+            particle.setAcceleration(states.get(particle).getAcceleration());
+        }
+    }
 
-        double xActualAcceleration = getOscillator().getXAcceleration();
-        double yActualAcceleration = getOscillator().getYAcceleration();
+    private void updateParticle(final Particle particle) {
+        final double dt = ioManager.getConfiguration().getDt();
 
-        double newXPosition = particlePosition.getX() + (dt * particleVelocity.getX()) + (2 / 3.0) * xActualAcceleration * Math.pow(dt,2) - (1.0 / 6) * xPreviousAcceleration * Math.pow(dt,2);
-        double newYPosition = particlePosition.getY() + (dt * particleVelocity.getY()) + (2 / 3.0) * yActualAcceleration * Math.pow(dt,2) - (1.0 / 6) * yPreviousAcceleration * Math.pow(dt,2);
+        final Point<Double> particlePosition = particle.getPosition();
+        Point<Double> particleVelocity = particle.getVelocity();
 
-        double xVelocityP = particleVelocity.getX() + (3 / 2.0) * xActualAcceleration * dt - (1 / 2.0) * xPreviousAcceleration * dt;
-        double yVelocityP = particleVelocity.getY() + (3 / 2.0) * yActualAcceleration * dt - (1 / 2.0) * yPreviousAcceleration * dt;
+        double xActualAcceleration = particle.getAcceleration().getX();
+        double yActualAcceleration = particle.getAcceleration().getY();
 
-        particle.updatePosition(new Point<>(newXPosition, newYPosition));
-        particle.updateVelocity(new Point<>(xVelocityP, yVelocityP));
+        Point<Double> newPosition = new Point<>(particlePosition.getX() + particleVelocity.getX() * dt + (2 / 3.0) * xActualAcceleration * Math.pow(dt, 2) - (1 / 6.0) * states.get(particle).getAcceleration().getX() * Math.pow(dt, 2),
+                particlePosition.getY() + particleVelocity.getY() * dt + (2 / 3.0) * yActualAcceleration * Math.pow(dt, 2) - (1 / 6.0) * states.get(particle).getAcceleration().getY() * Math.pow(dt, 2));
 
-        /*double xActualAcceleration2 = getOscillator().getXAcceleration();
-        double yActualAcceleration2 = getOscillator().getYAcceleration();
+        Point<Double> newAcceleration = Particle.calculateAcceleration(particle,
+                SimulationManager.calculateForces(particle.getId(), newPosition,
+                        particle.getMass(), particleManager.getParticleList()));
 
-        double correctedXVelocity = particleVelocity.getX() + (1 / 3.0) * xActualAcceleration2 * dt + (5 / 6.0) * xActualAcceleration * dt - (1 / 6.0) * xPreviousAcceleration * dt;
-        double correctedYVelocity = particleVelocity.getY() + (1 / 3.0) * yActualAcceleration2 * dt + (5 / 6.0) * yActualAcceleration * dt - (1 / 6.0) * yPreviousAcceleration * dt;
+        Point<Double> newVelocity = new Point<>(particleVelocity.getX() + (1 / 3.0) * newAcceleration.getX() * dt + (5 / 6.0) * xActualAcceleration * dt - (1 / 6.0) * states.get(particle).getAcceleration().getX() * dt,
+                particleVelocity.getY() + (1 / 3.0) * newAcceleration.getY() * dt + (5 / 6.0) * yActualAcceleration * dt - (1 / 6.0) * states.get(particle).getAcceleration().getY() * dt);
 
-        particle.updateVelocity(new Point<>(correctedXVelocity, correctedYVelocity));*/
-
-        xPreviousAcceleration = xActualAcceleration;
-        yPreviousAcceleration = yActualAcceleration;
-
-        return particle.getDoublePosition();
+        states.put(particle, new State(newPosition, newVelocity, newAcceleration));
     }
 }

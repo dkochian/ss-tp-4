@@ -1,5 +1,7 @@
 package ar.edu.itba.ss.utils.other;
 
+import java.util.Objects;
+
 public class Point<T extends Number> {
 
     private final T x;
@@ -21,5 +23,14 @@ public class Point<T extends Number> {
     @Override
     public String toString() {
         return "Point {x=" + x + ", y=" + y + "}";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Point<?> point = (Point<?>) o;
+        return Objects.equals(x, point.x) &&
+                Objects.equals(y, point.y);
     }
 }

@@ -6,8 +6,6 @@ public class Rounding {
 
     public static final int SCALE = 4;
 
-    public static final RoundingMode ROUNDING_MODE_UP = RoundingMode.HALF_UP;
-
-    public static final RoundingMode ROUNDING_MODE_DOWN = RoundingMode.HALF_DOWN;
+    public static final RoundingMode ROUNDING_MODE = RoundingMode.CEILING;
 
 }
