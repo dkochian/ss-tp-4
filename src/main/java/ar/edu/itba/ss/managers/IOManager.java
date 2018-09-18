@@ -3,6 +3,8 @@ package ar.edu.itba.ss.managers;
 import ar.edu.itba.ss.entities.Configuration;
 import ar.edu.itba.ss.entities.InputData;
 import ar.edu.itba.ss.entities.Particle;
+import ar.edu.itba.ss.entities.Spaceship;
+import ar.edu.itba.ss.utils.other.Point;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.slf4j.Logger;
@@ -10,7 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Singleton;
 import java.io.*;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,29 +42,15 @@ public class IOManager {
         return configuration;
     }
 
-    public InputData getInputData() throws IOException {
+    public InputData getInputData() {
         if (inputData == null) {
+            final String path = getConfiguration().getInputDirectory() + '/' + getConfiguration().getInputFilename();
             try {
                 logger.debug("Loading configuration");
-                inputData = read(getConfiguration().getInputDirectory() + '/' + getConfiguration().getInputFileName(),
+                inputData = read(path,
                         InputData.class);
             } catch (IOException e) {
                 logger.error("Input data file could not be found.");
-
-                final List<Particle> planets = new ArrayList<>();
-                planets.add(new Particle(0, BigDecimal.ZERO, BigDecimal.ZERO, new BigDecimal(3D),
-                        new BigDecimal(Math.PI), 10D, new BigDecimal(5.0)));
-                planets.add(new Particle(1, BigDecimal.ZERO, BigDecimal.ZERO, new BigDecimal(2D),
-                        new BigDecimal(Math.PI), 7D, new BigDecimal(4.0)));
-
-                final Particle spaceship = new Particle(2, BigDecimal.ZERO, BigDecimal.ZERO, new BigDecimal(2D),
-                        new BigDecimal(Math.PI), 15D, new BigDecimal(4.0));
-
-                final InputData inputData = new InputData(planets, spaceship);
-
-                write(getConfiguration().getInputDirectory() + "/" + getConfiguration().getInputFileName(), inputData);
-
-                throw e;
             }
         }
 

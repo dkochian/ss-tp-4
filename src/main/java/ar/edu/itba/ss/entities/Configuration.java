@@ -3,90 +3,92 @@ package ar.edu.itba.ss.entities;
 public class Configuration {
     //General
     private final String outputDirectory;
+    private final String outputFilename;
+    private final String inputDirectory;
+    private final String inputFilename;
 
-    //Oscillator
-    private final double k;
-    private final double particleMass;
+    //Simulation
     private final double dt;
-    private final double gamma;
     private final double duration;
-    private final double amplitude;
-
-    //schemas
+    private final double dAltitude;
+    private final int tAltitude;
     private final String[] schemas;
 
-    //Print Time
-    private final double printT;
+    //Animation
+    private final double print;
 
-    Configuration(String outputDirectory, double k, double particleMass, double dt, double gamma,
-                  double duration, double amplitude, double printT, String[] schemas) {
+    public Configuration(String outputDirectory, String outputFilename, String inputDirectory, String inputFilename,
+                         double dt, double duration, double dAltitude, int tAltitude, String[] schemas, double print) {
         this.outputDirectory = outputDirectory;
-        this.k = k;
-        this.particleMass = particleMass;
+        this.outputFilename = outputFilename;
+        this.inputDirectory = inputDirectory;
+        this.inputFilename = inputFilename;
         this.dt = dt;
-        this.gamma = gamma;
         this.duration = duration;
-        this.amplitude = amplitude;
-        this.printT = printT;
+        this.dAltitude = dAltitude;
+        this.tAltitude = tAltitude;
         this.schemas = schemas;
-
+        this.print = print;
     }
 
     public String getOutputDirectory() {
         return outputDirectory;
     }
 
-    public double getK() {
-        return k;
+    public String getOutputFilename() {
+        return outputFilename;
     }
 
-    public double getParticleMass() {
-        return particleMass;
+    public String getInputDirectory() {
+        return inputDirectory;
+    }
+
+    public String getInputFilename() {
+        return inputFilename;
     }
 
     public double getDt() {
         return dt;
     }
 
-    public double getGamma() {
-        return gamma;
-    }
-
     public double getDuration() {
         return duration;
     }
 
-    public double getAmplitude() {
-        return amplitude;
+    public double getdAltitude() {
+        return dAltitude;
+    }
+
+    public int gettAltitude() {
+        return tAltitude;
     }
 
     public String[] getSchemas() {
         return schemas;
     }
 
-    public double getPrintT() {
-        return printT;
+    public double getPrint() {
+        return print;
     }
 
     public static Configuration getDefault() {
         //General
         final String outputDirectory = "output";
+        final String outputFilename = "output.tsv";
+        final String inputDirectory = "input";
+        final String inputFilename = "input.json";
 
         //Oscillator
-        final double k = Math.pow(10, 4);
-        final double particleMass = 70.0;
-        final double dt = 0.0001;
-        final double gamma = 100.0;
+        final double dt = 60;
         final double duration = 5.0;
-        final double amplitude = 1.0;
-
-        //Print Time
-        final double printT = 0.05;
-
-        //schemas
+        final double dAltitude = 100.0;
+        final int tAltitude = 100;
         final String[] schemas = new String[]{"Analytic", "Beeman", "Gear", "Verlet"};
 
-        return new Configuration(outputDirectory, k, particleMass, dt, gamma, duration, amplitude, printT, schemas);
-    }
+        //Animation
+        final double print = 60*24;
 
+        return new Configuration(outputDirectory, outputFilename, inputDirectory, inputFilename, dt, duration,
+                dAltitude, tAltitude, schemas, print);
+    }
 }

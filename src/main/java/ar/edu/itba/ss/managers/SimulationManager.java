@@ -1,10 +1,15 @@
 package ar.edu.itba.ss.managers;
 
 import ar.edu.itba.ss.entities.Particle;
+import ar.edu.itba.ss.entities.Spaceship;
 import ar.edu.itba.ss.schemas.Schema;
 import ar.edu.itba.ss.utils.other.Point;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import sun.jvm.hotspot.gc.shared.Space;
 
 import javax.inject.Inject;
+import java.io.IOException;
 import java.util.List;
 
 public class SimulationManager {
@@ -12,14 +17,26 @@ public class SimulationManager {
     private static final double G = 6.693E-11;
 
     private final Schema schema;
+    private final ParticleManager particleManager;
 
     @Inject
-    public SimulationManager(Schema schema) {
+    public SimulationManager(IOManager ioManager, ParticleManager particleManager, Schema schema) {
         this.schema = schema;
+        this.particleManager = particleManager;
+
+        for(Particle particle : ioManager.getInputData().getPlanets())
+            particleManager.addParticle(particle);
     }
 
-    public void simulate() {
-        schema.updateParticles();
+    public double simulate(final double height) {
+        for(Particle particle : particleManager.getParticleList()) {
+            if (particle instanceof Spaceship) {
+                ((Spaceship) particle).setHeight(height);
+                break;
+            }
+        }
+
+        return schema.updateParticles();
     }
 
     public static Point<Double> calculateForces(final int id, final Point<Double> position, final Double mass,

@@ -11,26 +11,31 @@ import javax.inject.Inject;
 
 public class Beeman extends Schema {
 
+    private final IOManager ioManager;
+
     @Inject
     public Beeman(final IOManager ioManager, final ParticleManager particleManager) {
-        super(ioManager, particleManager);
+        super(particleManager);
+
+        this.ioManager = ioManager;
     }
 
     @Override
-    public void updateParticles() {
+    public double updateParticles() {
+        final double dt = ioManager.getConfiguration().getDt();
         for (Particle particle : particleManager.getParticleList())
-            updateParticle(particle);
+            updateParticle(particle, dt);
 
         for (Particle particle : particleManager.getParticleList()) {
             particle.setPosition(states.get(particle).getPosition());
             particle.setVelocity(states.get(particle).getVelocity());
             particle.setAcceleration(states.get(particle).getAcceleration());
         }
+
+        return dt;
     }
 
-    private void updateParticle(final Particle particle) {
-        final double dt = ioManager.getConfiguration().getDt();
-
+    private void updateParticle(final Particle particle, final double dt) {
         final Point<Double> particlePosition = particle.getPosition();
         Point<Double> particleVelocity = particle.getVelocity();
 

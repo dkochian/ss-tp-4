@@ -6,18 +6,18 @@ public class InputData {
 
     private List<Particle> planets;
 
-    private final Particle spaceShip;
+    private final Spaceship spaceship;
 
-    public InputData(final List<Particle> planets, final Particle spaceShip) {
+    public InputData(final List<Particle> planets, final Spaceship spaceship) {
         this.planets = planets;
-        this.spaceShip = spaceShip;
+        this.spaceship = spaceship;
     }
 
     public List<Particle> getPlanets() {
         return planets;
     }
 
-    public Particle getSpaceShip() {
-        return spaceShip;
+    public Spaceship getSpaceship() {
+        return spaceship;
     }
 }
