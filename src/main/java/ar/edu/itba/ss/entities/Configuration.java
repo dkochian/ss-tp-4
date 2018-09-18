@@ -83,7 +83,7 @@ public class Configuration {
         final int duration = 60*60*24*365*40;
         final double dAltitude = 100.0;
         final int tAltitude = 100;
-        final String[] schemas = new String[]{"Analytic", "Beeman", "Gear", "Verlet"};
+        final String[] schemas = new String[]{"Beeman", "Verlet"};
 
         //Animation
         final int print = 60*24;
