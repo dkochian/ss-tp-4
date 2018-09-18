@@ -17,7 +17,7 @@ public class Main {
         final SimulationManager simulationManager = InjectorManager.getInjector().getInstance(SimulationManager.class);
         final OutputWriter outputWriter = InjectorManager.getInjector().getInstance(OutputWriter.class);
 
-        double elapsed = 0D;
+        int elapsed = 0;
 
         for (double height = 0D; height <= ioManager.getConfiguration().gettAltitude() * ioManager.getConfiguration().getdAltitude();
              height += ioManager.getConfiguration().getdAltitude()) {

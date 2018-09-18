@@ -8,17 +8,17 @@ public class Configuration {
     private final String inputFilename;
 
     //Simulation
-    private final double dt;
-    private final double duration;
+    private final int dt;
+    private final int duration;
     private final double dAltitude;
     private final int tAltitude;
     private final String[] schemas;
 
     //Animation
-    private final double print;
+    private final int print;
 
     public Configuration(String outputDirectory, String outputFilename, String inputDirectory, String inputFilename,
-                         double dt, double duration, double dAltitude, int tAltitude, String[] schemas, double print) {
+                         int dt, int duration, double dAltitude, int tAltitude, String[] schemas, int print) {
         this.outputDirectory = outputDirectory;
         this.outputFilename = outputFilename;
         this.inputDirectory = inputDirectory;
@@ -47,11 +47,11 @@ public class Configuration {
         return inputFilename;
     }
 
-    public double getDt() {
+    public int getDt() {
         return dt;
     }
 
-    public double getDuration() {
+    public int getDuration() {
         return duration;
     }
 
@@ -67,7 +67,7 @@ public class Configuration {
         return schemas;
     }
 
-    public double getPrint() {
+    public int getPrint() {
         return print;
     }
 
@@ -79,14 +79,14 @@ public class Configuration {
         final String inputFilename = "input.json";
 
         //Oscillator
-        final double dt = 60;
-        final double duration = 5.0;
+        final int dt = 60;
+        final int duration = 60*60*24*365*40;
         final double dAltitude = 100.0;
         final int tAltitude = 100;
         final String[] schemas = new String[]{"Analytic", "Beeman", "Gear", "Verlet"};
 
         //Animation
-        final double print = 60*24;
+        final int print = 60*24;
 
         return new Configuration(outputDirectory, outputFilename, inputDirectory, inputFilename, dt, duration,
                 dAltitude, tAltitude, schemas, print);

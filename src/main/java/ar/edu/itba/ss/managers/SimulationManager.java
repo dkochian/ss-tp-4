@@ -4,12 +4,8 @@ import ar.edu.itba.ss.entities.Particle;
 import ar.edu.itba.ss.entities.Spaceship;
 import ar.edu.itba.ss.schemas.Schema;
 import ar.edu.itba.ss.utils.other.Point;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import sun.jvm.hotspot.gc.shared.Space;
 
 import javax.inject.Inject;
-import java.io.IOException;
 import java.util.List;
 
 public class SimulationManager {

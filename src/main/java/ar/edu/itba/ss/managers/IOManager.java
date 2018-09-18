@@ -2,9 +2,6 @@ package ar.edu.itba.ss.managers;
 
 import ar.edu.itba.ss.entities.Configuration;
 import ar.edu.itba.ss.entities.InputData;
-import ar.edu.itba.ss.entities.Particle;
-import ar.edu.itba.ss.entities.Spaceship;
-import ar.edu.itba.ss.utils.other.Point;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.slf4j.Logger;
@@ -12,11 +9,10 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Singleton;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Singleton
 public class IOManager {
+
     private static final String FILENAME = "config.json";
     private static final Logger logger = LoggerFactory.getLogger(IOManager.class);
 
@@ -61,7 +57,7 @@ public class IOManager {
         checkAndCreateFolder(filename);
         try (final Reader reader = new BufferedReader(new FileReader(filename))) {
             final Gson gson = (new GsonBuilder()).create();
-            return clazz.cast(gson.fromJson(reader, Configuration.class));
+            return clazz.cast(gson.fromJson(reader, clazz));
         }
     }
 
@@ -76,7 +72,7 @@ public class IOManager {
     private void checkAndCreateFolder(final String filename) {
         final int index = filename.lastIndexOf('/');
         if (index != -1) {
-            final String folder = FILENAME.substring(0, index);
+            final String folder = filename.substring(0, index);
             final File file = new File(folder);
             if (!file.exists())
                 if (!file.mkdirs())
