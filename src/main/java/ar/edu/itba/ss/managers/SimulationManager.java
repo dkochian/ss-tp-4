@@ -22,6 +22,8 @@ public class SimulationManager {
 
         for(Particle particle : ioManager.getInputData().getPlanets())
             particleManager.addParticle(particle);
+
+        schema.init();
     }
 
     public double simulate(final double height) {

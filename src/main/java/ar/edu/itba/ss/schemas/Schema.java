@@ -14,7 +14,9 @@ public abstract class Schema {
 
     Schema(final ParticleManager particleManager) {
         this.particleManager = particleManager;
+    }
 
+    public void init() {
         for (Particle particle: particleManager.getParticleList())
             states.put(particle, new State(particle.getPosition(), particle.getVelocity()));
     }
