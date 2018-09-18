@@ -22,6 +22,8 @@ public class Main {
         for (double height = 0D; height <= ioManager.getConfiguration().gettAltitude() * ioManager.getConfiguration().getdAltitude();
              height += ioManager.getConfiguration().getdAltitude()) {
 
+            outputWriter.remove(String.valueOf(height));
+
             while (elapsed <= ioManager.getConfiguration().getDuration()) {
                 elapsed += simulationManager.simulate(height);
 

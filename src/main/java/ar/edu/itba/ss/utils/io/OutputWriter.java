@@ -3,7 +3,8 @@ package ar.edu.itba.ss.utils.io;
 import ar.edu.itba.ss.entities.Particle;
 import ar.edu.itba.ss.managers.IOManager;
 import ar.edu.itba.ss.managers.ParticleManager;
-import com.google.inject.assistedinject.Assisted;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.io.*;
@@ -12,6 +13,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class OutputWriter {
+
+    private static final Logger logger = LoggerFactory.getLogger(OutputWriter.class);
 
     private final IOManager ioManager;
     private final ParticleManager particleManager;
@@ -29,21 +32,7 @@ public class OutputWriter {
     }
 
     public void write(final String postFix) throws IOException {
-        final int index = ioManager.getConfiguration().getOutputFilename().lastIndexOf('.');
-        String path = ioManager.getConfiguration().getOutputDirectory() + "/"
-                + ioManager.getConfiguration().getOutputFilename() + postFix;
-
-        if(index != -1) {
-            final String name = ioManager.getConfiguration().getOutputFilename().substring(0, index);
-            final String extention = ioManager.getConfiguration().getOutputFilename().substring(index);
-            final String newName = name + "-" + postFix + extention;
-            path = ioManager.getConfiguration().getOutputDirectory() + "/" + newName;
-        }
-
-        final Path p = Paths.get(path);
-
-        if (Files.exists(p))
-            Files.delete(p);
+        final String path = getPath(postFix);
 
         try (final PrintWriter printWriter = new PrintWriter(new BufferedWriter(new FileWriter(path, true)))) {
             for(Particle particle : particleManager.getParticleList())
@@ -65,6 +54,33 @@ public class OutputWriter {
 
             printWriter.flush();
         }
+    }
+
+    public void remove(final String postFix) {
+        final Path p = Paths.get(getPath(postFix));
+
+        if (Files.exists(p)) {
+            try {
+                Files.delete(p);
+            } catch (IOException e) {
+                logger.error(e.getMessage());
+            }
+        }
+    }
+
+    private String getPath(final String postFix) {
+        final int index = ioManager.getConfiguration().getOutputFilename().lastIndexOf('.');
+        String path = ioManager.getConfiguration().getOutputDirectory() + "/"
+                + ioManager.getConfiguration().getOutputFilename() + postFix;
+
+        if(index != -1) {
+            final String name = ioManager.getConfiguration().getOutputFilename().substring(0, index);
+            final String extention = ioManager.getConfiguration().getOutputFilename().substring(index);
+            final String newName = name + "-" + postFix + extention;
+            path = ioManager.getConfiguration().getOutputDirectory() + "/" + newName;
+        }
+
+        return path;
     }
 
 }
