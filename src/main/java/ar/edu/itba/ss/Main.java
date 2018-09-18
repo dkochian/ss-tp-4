@@ -27,7 +27,7 @@ public class Main {
 
                 if (elapsed % ioManager.getConfiguration().getPrint() == 0) {
                     try {
-                        outputWriter.write();
+                        outputWriter.write(String.valueOf(height));
                     } catch (IOException e) {
                         logger.error(e.getMessage());
                     }

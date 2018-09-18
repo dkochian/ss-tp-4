@@ -3,6 +3,7 @@ package ar.edu.itba.ss.utils.io;
 import ar.edu.itba.ss.entities.Particle;
 import ar.edu.itba.ss.managers.IOManager;
 import ar.edu.itba.ss.managers.ParticleManager;
+import com.google.inject.assistedinject.Assisted;
 
 import javax.inject.Inject;
 import java.io.*;
@@ -27,9 +28,18 @@ public class OutputWriter {
 
     }
 
-    public void write() throws IOException {
-        final String path = ioManager.getConfiguration().getOutputDirectory() + "/"
-                + ioManager.getConfiguration().getOutputFilename();
+    public void write(final String postFix) throws IOException {
+        final int index = ioManager.getConfiguration().getOutputFilename().lastIndexOf('.');
+        String path = ioManager.getConfiguration().getOutputDirectory() + "/"
+                + ioManager.getConfiguration().getOutputFilename() + postFix;
+
+        if(index != -1) {
+            final String name = ioManager.getConfiguration().getOutputFilename().substring(0, index);
+            final String extention = ioManager.getConfiguration().getOutputFilename().substring(index);
+            final String newName = name + "-" + postFix + extention;
+            path = ioManager.getConfiguration().getOutputDirectory() + "/" + newName;
+        }
+
         final Path p = Paths.get(path);
 
         if (Files.exists(p))
