@@ -11,7 +11,6 @@ import java.util.List;
 public class SimulationManager {
 
     private static final double G = 6.693E-11;
-    private static final double KM2_TO_M2 = 1000000;
 
     private final Schema schema;
     private final ParticleManager particleManager;
@@ -44,14 +43,15 @@ public class SimulationManager {
         double forceY = 0.0;
         for (Particle particle : particleList) {
             if (!particle.getId().equals(id)) {
-                forceY += getGravityForce(position, particle.getPosition(), mass, particle.getMass()) * (particle.getPosition().getY() - position.getY()) / Particle.getDistance(particle.getPosition(), position);
-                forceX += getGravityForce(position, particle.getPosition(), mass, particle.getMass()) * (particle.getPosition().getX() - position.getX()) / Particle.getDistance(particle.getPosition(), position);
+                double gravityForce = getGravityForce(position, particle.getPosition(), mass, particle.getMass());
+                forceY += gravityForce * (particle.getPosition().getY() - position.getY()) / Particle.getDistance(particle.getPosition(), position);
+                forceX += gravityForce * (particle.getPosition().getX() - position.getX()) / Particle.getDistance(particle.getPosition(), position);
             }
         }
         return new Point<>(forceX, forceY);
     }
 
     private static double getGravityForce(final Point<Double> pos1, final Point<Double> pos2, final double m1, final double m2) {
-        return G * m1 * m2 / (Math.pow(Particle.getDistance(pos1, pos2), 2) * KM2_TO_M2);
+        return G * m1 * m2 / (Math.pow(Particle.getDistance(pos1, pos2), 2));
     }
 }
