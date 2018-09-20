@@ -27,9 +27,11 @@ public class Beeman extends Schema {
             updateParticle(particle, dt);
 
         for (Particle particle : particleManager.getParticleList()) {
-            particle.setPosition(states.get(particle).getPosition());
-            particle.setVelocity(states.get(particle).getVelocity());
-            particle.setAcceleration(states.get(particle).getAcceleration());
+            if (particle.getId() != 1) {
+                particle.setPosition(states.get(particle).getPosition());
+                particle.setVelocity(states.get(particle).getVelocity());
+                particle.setAcceleration(states.get(particle).getAcceleration());
+            }
         }
 
         return dt;

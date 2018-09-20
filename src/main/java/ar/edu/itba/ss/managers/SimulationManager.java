@@ -11,6 +11,7 @@ import java.util.List;
 public class SimulationManager {
 
     private static final double G = 6.693E-11;
+    private static final double KM2_TO_M2 = 1000000;
 
     private final Schema schema;
     private final ParticleManager particleManager;
@@ -51,6 +52,6 @@ public class SimulationManager {
     }
 
     private static double getGravityForce(final Point<Double> pos1, final Point<Double> pos2, final double m1, final double m2) {
-        return G * m1 * m2 / Math.pow(Particle.getDistance(pos1, pos2), 2);
+        return G * m1 * m2 / (Math.pow(Particle.getDistance(pos1, pos2), 2) * KM2_TO_M2);
     }
 }
