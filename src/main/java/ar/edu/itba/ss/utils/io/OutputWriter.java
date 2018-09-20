@@ -19,6 +19,8 @@ public class OutputWriter {
     private final IOManager ioManager;
     private final ParticleManager particleManager;
 
+    private int counter = 0;
+
     @Inject
     public OutputWriter(final IOManager ioManager, final ParticleManager particleManager) {
         this.ioManager = ioManager;
@@ -35,10 +37,14 @@ public class OutputWriter {
         final String path = getPath(postFix);
 
         try (final PrintWriter printWriter = new PrintWriter(new BufferedWriter(new FileWriter(path, true)))) {
+            printWriter
+                    .append(String.valueOf(particleManager.getParticleList().size()))
+                    .append("\r\n")
+                    .append(String.valueOf(counter++))
+                    .append("\r\n");
+
             for(Particle particle : particleManager.getParticleList())
                 printWriter
-                        .append(String.valueOf(particle.getId()))
-                        .append('\t')
                         .append(String.valueOf(particle.getPosition().getX()))
                         .append('\t')
                         .append(String.valueOf(particle.getPosition().getY()))
@@ -50,6 +56,8 @@ public class OutputWriter {
                         .append(String.valueOf(particle.getRadius()))
                         .append('\t')
                         .append(String.valueOf(particle.getMass()))
+                        .append('\t')
+                        .append(String.valueOf(particle.getId()))
                         .append("\r\n");
 
             printWriter.flush();
