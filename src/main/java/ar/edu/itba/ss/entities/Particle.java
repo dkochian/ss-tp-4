@@ -62,16 +62,7 @@ public class Particle {
 
     @Override
     public int hashCode() {
-        int result = 11;
-
-        result = 19 * result + id.hashCode();
-        result = 19 * result + position.hashCode();
-        result = 19 * result + velocity.hashCode();
-        result = 19 * result + acceleration.hashCode();
-        result = 19 * result + mass.hashCode();
-        result = 19 * result + radius.hashCode();
-
-        return result;
+        return id.hashCode();
     }
 
     public Point<Double> getPosition() {
