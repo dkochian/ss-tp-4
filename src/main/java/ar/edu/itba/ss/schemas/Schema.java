@@ -1,27 +1,29 @@
 package ar.edu.itba.ss.schemas;
 
-import ar.edu.itba.ss.entities.Oscillator;
 import ar.edu.itba.ss.entities.Particle;
-import ar.edu.itba.ss.utils.other.Point;
+import ar.edu.itba.ss.entities.State;
+import ar.edu.itba.ss.managers.ParticleManager;
+
+import java.util.*;
 
 public abstract class Schema {
 
-    private final Oscillator oscillator;
+    final ParticleManager particleManager;
 
-    Schema(Oscillator oscillator) {
-        this.oscillator = oscillator;
+    final Map<Particle, State> states = new HashMap<>();
+
+    Schema(final ParticleManager particleManager) {
+        this.particleManager = particleManager;
     }
 
-    Oscillator getOscillator() {
-        return oscillator;
-    }
-
-    public Particle getParticle(){
-        return oscillator.getParticle();
+    public void init() {
+        for (Particle particle: particleManager.getParticleList())
+            states.put(particle, new State(particle.getPosition(), particle.getVelocity()));
     }
 
     /**
      * This function will update particles position and velocity
      */
-    public abstract Point<Double> updateParticle();
+    public abstract double updateParticles();
+
 }

@@ -1,84 +1,46 @@
 package ar.edu.itba.ss.entities;
 
 import ar.edu.itba.ss.utils.other.Point;
-import ar.edu.itba.ss.utils.other.Rounding;
-
-import java.math.BigDecimal;
 
 public class Particle {
 
     private final Integer id;
 
-    private Point<BigDecimal> position;
-
-    private BigDecimal speed;
-
-    private Point<BigDecimal> velocity;
-
     private final Double mass;
 
-    private BigDecimal angle;
+    private final Double radius;
 
-    public Particle(int id, BigDecimal x, BigDecimal y, BigDecimal speed, BigDecimal angle, Double mass) {
-        position = new Point<>(x, y);
+    private Point<Double> position;
 
+    private Point<Double> velocity;
+
+    private Point<Double> acceleration;
+
+    public Particle(int id, Point<Double> position, Point<Double> velocity,
+                    Point<Double> acceleration, double mass, double radius) {
         this.id = id;
-        this.speed = speed;
-        this.velocity = new Point<>(speed.multiply(new BigDecimal(Math.cos(angle.doubleValue()))),
-                speed.multiply(new BigDecimal(Math.sin(angle.doubleValue()))));
-        this.angle = angle;
+        this.position = position;
+        this.velocity = velocity;
+        this.acceleration = acceleration;
         this.mass = mass;
+        this.radius = radius;
     }
 
-    public Point<BigDecimal> getPosition() {
-        return position;
+    public static Point<Double> calculateAcceleration(final Particle particle, final Point<Double> forces) {
+        return new Point<>(forces.getX() / particle.mass, forces.getY() / particle.mass);
     }
 
-    public Point<Double> getDoublePosition() {
-        return new Point<>(position.getX().doubleValue(), position.getY().doubleValue());
-    }
-
-    public BigDecimal getAngle() {
-        return angle;
-    }
-
-    public BigDecimal getSpeed() {
-        return speed;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public Double getMass() {
-        return mass;
-    }
-
-    public Point<Double> getVelocity() {
-        return new Point<>(velocity.getX().doubleValue(), velocity.getY().doubleValue());
-    }
-
-    public void updateVelocity(final Point<Double> velocity) {
-        this.velocity = new Point<>(new BigDecimal(velocity.getX()), new BigDecimal(velocity.getY()));
-    }
-
-    public void updatePosition(final Point<Double> position) {
-        this.position = new Point<>(new BigDecimal(position.getX()), new BigDecimal(position.getY()));
-    }
-
-    public void update(final double t) {
-        //Update position
-        BigDecimal newX = position.getX().add(speed.multiply(new BigDecimal(Math.cos(angle.doubleValue())))
-                .multiply(new BigDecimal(t))).setScale(Rounding.SCALE, Rounding.ROUNDING_MODE_UP);
-        BigDecimal newY = position.getY().add(speed.multiply(new BigDecimal(Math.sin(angle.doubleValue())))
-                .multiply(new BigDecimal(t))).setScale(Rounding.SCALE, Rounding.ROUNDING_MODE_UP);
-
-        position = new Point<>(newX, newY);
+    public void update(final Point<Double> forces) {
+        acceleration = calculateAcceleration(this, forces);
     }
 
     public double getDistance(final Particle p) {
-        return Math.sqrt(Math.pow(position.getX().subtract(p.position.getX()).doubleValue(), 2)
-                + Math.pow(position.getY().subtract(p.position.getY()).doubleValue(), 2));
+        return getDistance(position, p.getPosition());
+    }
+
+    public static double getDistance(final Point<Double> pos1, final Point<Double> pos2) {
+        return Math.sqrt(Math.pow(pos1.getX() - pos2.getX(), 2)
+                + Math.pow(pos1.getY() - pos2.getY(), 2));
     }
 
     @Override
@@ -95,8 +57,7 @@ public class Particle {
         if (!(obj instanceof Particle)) return false;
         final Particle p = (Particle) obj;
 
-        return id.equals(p.id) && position.equals(p.position) && speed.equals(p.speed) && angle.equals(p.angle)
-                && mass.equals(p.mass);
+        return id.equals(p.id);
     }
 
     @Override
@@ -105,11 +66,48 @@ public class Particle {
 
         result = 19 * result + id.hashCode();
         result = 19 * result + position.hashCode();
-        result = 19 * result + speed.hashCode();
-        result = 19 * result + angle.hashCode();
+        result = 19 * result + velocity.hashCode();
+        result = 19 * result + acceleration.hashCode();
         result = 19 * result + mass.hashCode();
+        result = 19 * result + radius.hashCode();
 
         return result;
+    }
+
+    public Point<Double> getPosition() {
+        return position;
+    }
+
+    public Point<Double> getVelocity() {
+        return velocity;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public Double getMass() {
+        return mass;
+    }
+
+    public Double getRadius() {
+        return radius;
+    }
+
+    public Point<Double> getAcceleration() {
+        return acceleration;
+    }
+
+    public void setVelocity(final Point<Double> velocity) {
+        this.velocity = velocity;
+    }
+
+    public void setPosition(final Point<Double> position) {
+        this.position = position;
+    }
+
+    public void setAcceleration(final Point<Double> acceleration) {
+        this.acceleration = acceleration;
     }
 
 }
