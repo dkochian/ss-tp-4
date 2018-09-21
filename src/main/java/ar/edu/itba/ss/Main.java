@@ -1,5 +1,6 @@
 package ar.edu.itba.ss;
 
+import ar.edu.itba.ss.entities.Particle;
 import ar.edu.itba.ss.managers.IOManager;
 import ar.edu.itba.ss.managers.InjectorManager;
 import ar.edu.itba.ss.managers.SimulationManager;
@@ -19,9 +20,10 @@ public class Main {
 
         int elapsed = 0;
 
-        for (double height = 0D; height <= ioManager.getConfiguration().gettAltitude() * ioManager.getConfiguration().getdAltitude();
+        for (double height = Particle.EARTH_RADIUS; height <= Particle.EARTH_RADIUS + ioManager.getConfiguration().gettAltitude();
              height += ioManager.getConfiguration().getdAltitude()) {
 
+            simulationManager.setSpaceShip(height, ioManager.getConfiguration().getVelocity());
             outputWriter.remove(String.valueOf(height));
 
             while (elapsed <= ioManager.getConfiguration().getDuration()) {

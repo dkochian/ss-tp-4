@@ -4,6 +4,8 @@ import ar.edu.itba.ss.utils.other.Point;
 
 public class Particle {
 
+    public static final int EARTH_RADIUS = 6378000;
+
     private final Integer id;
 
     private final Double mass;
