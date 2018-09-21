@@ -13,7 +13,7 @@ public class ParticleManager {
 
     private List<Particle> particleList = new ArrayList<>();
 
-    private static final int SHIP_ID = 0;
+    private static final int SPACESHIP_ID = 0;
     private static final int SUN_ID = 1;
     private static final int EARTH_ID = 2;
     private static final int JUPITER_ID = 3;
@@ -25,12 +25,6 @@ public class ParticleManager {
 
     public List<Particle> getParticleList() {
         return Collections.unmodifiableList(particleList);
-    }
-
-    public void updateParticles(final Point<Double> forces) {
-        for (Particle particle : particleList)
-            particle.update(forces);
-
     }
 
     void clear(){
@@ -58,9 +52,9 @@ public class ParticleManager {
         return null;
     }
 
-    Particle getShip(){
+    Particle getSpaceShip(){
         for (Particle particle : particleList)
-            if (particle.getId().equals(SHIP_ID))
+            if (particle.getId().equals(SPACESHIP_ID))
                 return particle;
         return null;
     }
