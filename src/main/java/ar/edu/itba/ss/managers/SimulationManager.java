@@ -1,7 +1,6 @@
 package ar.edu.itba.ss.managers;
 
 import ar.edu.itba.ss.entities.Particle;
-import ar.edu.itba.ss.entities.Spaceship;
 import ar.edu.itba.ss.schemas.Schema;
 import ar.edu.itba.ss.utils.io.OutputWriter;
 import ar.edu.itba.ss.utils.other.Point;
@@ -17,9 +16,6 @@ public class SimulationManager {
     private static final Logger logger = LoggerFactory.getLogger(SimulationManager.class);
 
     private static final double G = 6.693E-11;
-
-    private static final int SPACESHIP_INDEX = 0;
-    private static final int EARTH_INDEX = 2;
 
     private static final double DAY = 24 * 3600.0;
     private static final double WEEK = DAY * 7;
@@ -62,14 +58,7 @@ public class SimulationManager {
         return new Point<>(forceX, forceY);
     }
 
-    private double simulate(final double height) {
-        for (Particle particle : particleManager.getParticleList()) {
-            if (particle instanceof Spaceship) {
-                ((Spaceship) particle).setHeight(height);
-                break;
-            }
-        }
-
+    private double simulate() {
         return schema.updateParticles();
     }
 
@@ -86,7 +75,7 @@ public class SimulationManager {
 
     public void setSpaceShip(double height, double velocity) {
 
-        Point<Double> earthPosition = particleManager.getParticleList().get(EARTH_INDEX).getPosition();
+        Point<Double> earthPosition = particleManager.getEarth().getPosition();
 
         double angle = Math.atan2(earthPosition.getY(), earthPosition.getX());
 
@@ -97,37 +86,37 @@ public class SimulationManager {
         Point<Double> spaceShipPosition = new Point<>(spaceShipHypotenuse * Math.cos(angle),
                 spaceShipHypotenuse * Math.sin(angle));
 
-        particleManager.getParticleList().get(SPACESHIP_INDEX).setPosition(spaceShipPosition);
+        particleManager.getSpaceShip().setPosition(spaceShipPosition);
 
-        Point<Double> earthVelocity = particleManager.getParticleList().get(EARTH_INDEX).getVelocity();
+        Point<Double> earthVelocity = particleManager.getEarth().getVelocity();
 
         Point<Double> tangentialVersor = new Point<>(Math.abs((spaceShipPosition.getY() - earthPosition.getY()) / Particle.getDistance(earthPosition, spaceShipPosition)),
                 Math.abs((spaceShipPosition.getX() - earthPosition.getX()) / Particle.getDistance(earthPosition, spaceShipPosition)));
 
-        particleManager.getParticleList().get(SPACESHIP_INDEX).setVelocity(new Point<>(earthVelocity.getX() + Math.signum(earthVelocity.getX()) * tangentialVersor.getX() * velocity,
+        particleManager.getSpaceShip().setVelocity(new Point<>(earthVelocity.getX() + Math.signum(earthVelocity.getX()) * tangentialVersor.getX() * velocity,
                 earthVelocity.getY() + Math.signum(earthVelocity.getY()) * tangentialVersor.getY() * velocity));
     }
 
     public void findShortestDistance(final double height) {
 
-        double distanceToJupiter = Particle.getDistance(particleManager.getEarth().getPosition(), particleManager.getJupiter().getPosition());
-        double distanceToSaturn = Particle.getDistance(particleManager.getEarth().getPosition(), particleManager.getSaturn().getPosition());
+        double distanceToJupiter = Particle.getDistance(particleManager.getSpaceShip().getPosition(), particleManager.getJupiter().getPosition());
+        double distanceToSaturn = Particle.getDistance(particleManager.getSpaceShip().getPosition(), particleManager.getSaturn().getPosition());
         double tOfLessDistanceJupiter = 0;
         double tOfLessDistanceSaturn = 0;
         int elapsed = 0;
 
         while (elapsed <= ioManager.getConfiguration().getDuration()) {
-            elapsed += simulate(height);
+            elapsed += simulate();
 
             if (elapsed % ioManager.getConfiguration().getPrint() == 0) {
                 try {
-                    outputWriter.write(String.valueOf(height));
+                    outputWriter.write(String.valueOf((height - Particle.EARTH_RADIUS)/1000));
                 } catch (IOException e) {
                     logger.error(e.getMessage());
                 }
             }
-            double newDistanceToJupiter = Particle.getDistance(particleManager.getEarth().getPosition(), particleManager.getJupiter().getPosition());
-            double newDistanceToSaturn = Particle.getDistance(particleManager.getEarth().getPosition(), particleManager.getSaturn().getPosition());
+            double newDistanceToJupiter = Particle.getDistance(particleManager.getSpaceShip().getPosition(), particleManager.getJupiter().getPosition());
+            double newDistanceToSaturn = Particle.getDistance(particleManager.getSpaceShip().getPosition(), particleManager.getSaturn().getPosition());
             if (newDistanceToJupiter < distanceToJupiter) {
                 distanceToJupiter = newDistanceToJupiter;
                 tOfLessDistanceJupiter = elapsed;
@@ -147,7 +136,7 @@ public class SimulationManager {
         final Particle earth = particleManager.getEarth();
         final Particle jupiter = particleManager.getJupiter();
         final Particle saturn = particleManager.getSaturn();
-        final Particle ship = particleManager.getShip();
+        final Particle ship = particleManager.getSpaceShip();
 
         double originalDistanceToJupiter = distanceToJupiter();
 
@@ -162,7 +151,9 @@ public class SimulationManager {
         Particle crashedWith = null;
 
         while (elapsed <= ioManager.getConfiguration().getDuration() && crashedWith == null && elapsed < DAY * finalDay) {
-            elapsed += simulate(height);
+            elapsed += simulate();
+
+
 
 
             double newDistanceJupiter = distanceToJupiter();
@@ -199,13 +190,13 @@ public class SimulationManager {
     }
 
     private double distanceToJupiter() {
-        return Particle.getDistance(particleManager.getShip().getPosition(), particleManager.getJupiter().getPosition()) - particleManager.getJupiter().getRadius();
+        return Particle.getDistance(particleManager.getSpaceShip().getPosition(), particleManager.getJupiter().getPosition()) - particleManager.getJupiter().getRadius();
     }
 
     private Particle hasCrashed(double height) {
         final Particle sun = particleManager.getSun();
         final Particle earth = particleManager.getEarth();
-        final Particle ship = particleManager.getShip();
+        final Particle ship = particleManager.getSpaceShip();
         if (Particle.getDistance(ship.getPosition(), sun.getPosition()) < (ship.getRadius() + sun.getRadius() + height)) {
             return sun;
         } else if(Particle.getDistance(ship.getPosition(), earth.getPosition()) < (ship.getRadius() + earth.getRadius()))

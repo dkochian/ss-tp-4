@@ -20,10 +20,12 @@ public class Main {
              height <  Particle.EARTH_RADIUS + ioManager.getConfiguration().gettAltitude();
              height += ioManager.getConfiguration().getdAltitude()) {
 
-            logger.info("Running simulation for height: " + height);
+            double orbitalHeight = (height - Particle.EARTH_RADIUS)/1000;
+
+            logger.info("Running simulation for orbital height: " + orbitalHeight + " km");
 
             simulationManager.setSpaceShip(height, ioManager.getConfiguration().getVelocity());
-            outputWriter.remove(String.valueOf(height));
+            outputWriter.remove(String.valueOf(orbitalHeight));
 
             simulationManager.findShortestDistance(height);
             simulationManager.reset();
