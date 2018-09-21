@@ -14,7 +14,7 @@ public class SimulationManager {
 
     private static final int SPACESHIP_INDEX = 0;
     private static final int EARTH_INDEX = 2;
-    
+
     private final Schema schema;
     private final ParticleManager particleManager;
 
