@@ -17,7 +17,7 @@ public class Main {
         final OutputWriter outputWriter = InjectorManager.getInjector().getInstance(OutputWriter.class);
 
         for (double height = Particle.EARTH_RADIUS;
-             height <=  Particle.EARTH_RADIUS + ioManager.getConfiguration().gettAltitude();
+             height <  Particle.EARTH_RADIUS + ioManager.getConfiguration().gettAltitude();
              height += ioManager.getConfiguration().getdAltitude()) {
 
             logger.info("Running simulation for height: " + height);
