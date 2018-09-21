@@ -93,8 +93,8 @@ public class SimulationManager {
 
         double spaceShipHypotenuse = earthHypotenuse + height;
 
-        Point<Double> spaceShipPosition = new Point<>(spaceShipHypotenuse * Math.sin(angle),
-                spaceShipHypotenuse * Math.cos(angle));
+        Point<Double> spaceShipPosition = new Point<>(spaceShipHypotenuse * Math.cos(angle),
+                spaceShipHypotenuse * Math.sin(angle));
 
         particleManager.getParticleList().get(SPACESHIP_INDEX).setPosition(spaceShipPosition);
 
