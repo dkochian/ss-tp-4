@@ -101,8 +101,8 @@ public class SimulationManager {
 
         Point<Double> earthVelocity = particleManager.getParticleList().get(EARTH_INDEX).getVelocity();
 
-        Point<Double> tangentialVersor = new Point<>(-1 * ((earthPosition.getY() - spaceShipPosition.getY()) / Particle.getDistance(earthPosition, spaceShipPosition)),
-                (earthPosition.getX() - spaceShipPosition.getX()) / Particle.getDistance(earthPosition, spaceShipPosition));
+        Point<Double> tangentialVersor = new Point<>(-1 * (( spaceShipPosition.getY() - earthPosition.getY()) / Particle.getDistance(earthPosition, spaceShipPosition)),
+                (spaceShipPosition.getX() - earthPosition.getX()) / Particle.getDistance(earthPosition, spaceShipPosition));
 
         particleManager.getParticleList().get(SPACESHIP_INDEX).setVelocity(new Point<>(earthVelocity.getX() + tangentialVersor.getX() * velocity,
                 earthVelocity.getY() + tangentialVersor.getY() * velocity));
