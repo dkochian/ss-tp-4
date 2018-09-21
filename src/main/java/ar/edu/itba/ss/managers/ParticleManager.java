@@ -13,13 +13,13 @@ public class ParticleManager {
 
     private List<Particle> particleList = new ArrayList<>();
 
+    private static final int SHIP_ID = 0;
     private static final int SUN_ID = 1;
     private static final int EARTH_ID = 2;
-    private static final int SATURN_ID = 3;
-    private static final int JUPITER_ID = 4;
-    private static final int SHIP_ID = 5;
+    private static final int JUPITER_ID = 3;
+    private static final int SATURN_ID = 4;
 
-    public boolean addParticle(final Particle p) {
+    boolean addParticle(final Particle p) {
         return particleList.add(p);
     }
 
