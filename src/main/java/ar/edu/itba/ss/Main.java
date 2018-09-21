@@ -23,6 +23,7 @@ public class Main {
             outputWriter.remove(String.valueOf(height));
 
             simulationManager.findShortestDistance(height);
+            simulationManager.reset();
         }
     }
 }

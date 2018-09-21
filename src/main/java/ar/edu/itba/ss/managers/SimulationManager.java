@@ -7,7 +7,6 @@ import ar.edu.itba.ss.utils.io.OutputWriter;
 import ar.edu.itba.ss.utils.other.Point;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sun.security.krb5.internal.PAData;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -40,29 +39,13 @@ public class SimulationManager {
         this.outputWriter = outputWriter;
         this.particleManager = particleManager;
 
-        for (Particle particle : ioManager.getInputData().getPlanets())
-            particleManager.addParticle(particle);
-
-        schema.init();
+        load();
     }
 
-    private void resetSimulation() {
-        particleManager.resetParticlesList();
-        for (Particle particle : ioManager.getInputData().getPlanets())
-            particleManager.addParticle(particle);
-
-        schema.init();
-    }
-
-    private double simulate(final double height) {
-        for (Particle particle : particleManager.getParticleList()) {
-            if (particle instanceof Spaceship) {
-                ((Spaceship) particle).setHeight(height);
-                break;
-            }
-        }
-
-        return schema.updateParticles();
+    public void reset() {
+        particleManager.clear();
+        ioManager.reload();
+        load();
     }
 
     public static Point<Double> calculateForces(final int id, final Point<Double> position, final Double mass,
@@ -77,6 +60,24 @@ public class SimulationManager {
             }
         }
         return new Point<>(forceX, forceY);
+    }
+
+    private double simulate(final double height) {
+        for (Particle particle : particleManager.getParticleList()) {
+            if (particle instanceof Spaceship) {
+                ((Spaceship) particle).setHeight(height);
+                break;
+            }
+        }
+
+        return schema.updateParticles();
+    }
+
+    private void load() {
+        for (Particle particle : ioManager.getInputData().getPlanets())
+            particleManager.addParticle(particle);
+
+        schema.init();
     }
 
     private static double getGravityForce(final Point<Double> pos1, final Point<Double> pos2, final double m1, final double m2) {
@@ -115,7 +116,6 @@ public class SimulationManager {
         double tOfLessDistanceSaturn = 0;
         int elapsed = 0;
 
-
         while (elapsed <= ioManager.getConfiguration().getDuration()) {
             elapsed += simulate(height);
 
@@ -139,8 +139,6 @@ public class SimulationManager {
             }
         }
 
-        resetSimulation();
-
         System.out.println("To Jupiter Day of min distance: " + tOfLessDistanceJupiter / DAY + ". Distance: " + distanceToJupiter);
         System.out.println("To Saturn Day of min distance: " + tOfLessDistanceSaturn / DAY + ". Distance: " + distanceToSaturn);
     }
@@ -162,7 +160,6 @@ public class SimulationManager {
         int elapsed = 0;
 
         Particle crashedWith = null;
-
 
         while (elapsed <= ioManager.getConfiguration().getDuration() && crashedWith == null && elapsed < DAY * finalDay) {
             elapsed += simulate(height);
