@@ -53,6 +53,11 @@ public class IOManager {
         return inputData;
     }
 
+    public void reload() {
+        inputData = null;
+        configuration = null;
+    }
+
     private <T> T read(final String filename, Class<T> clazz) throws IOException {
         checkAndCreateFolder(filename);
         try (final Reader reader = new BufferedReader(new FileReader(filename))) {

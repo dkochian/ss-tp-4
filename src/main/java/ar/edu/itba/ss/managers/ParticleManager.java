@@ -33,7 +33,7 @@ public class ParticleManager {
 
     }
 
-    void resetParticlesList(){
+    void clear(){
         particleList.clear();
     }
 
