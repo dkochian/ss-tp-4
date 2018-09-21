@@ -86,9 +86,9 @@ public class Configuration {
         //Oscillator
         final int dt = 60;
         final int duration = 60*60*24*365*40;
-        final double dAltitude = 100.0;
-        final int tAltitude = 100;
-        final double velocity = 15.0;
+        final double dAltitude = 1000000;
+        final int tAltitude = 10000000;
+        final double velocity = 15000;
         final String[] schemas = new String[]{"Beeman", "Verlet"};
 
         //Animation

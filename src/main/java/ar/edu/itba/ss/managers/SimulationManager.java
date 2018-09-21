@@ -101,11 +101,11 @@ public class SimulationManager {
 
         Point<Double> earthVelocity = particleManager.getParticleList().get(EARTH_INDEX).getVelocity();
 
-        Point<Double> tangentialVersor = new Point<>(-1 * (( spaceShipPosition.getY() - earthPosition.getY()) / Particle.getDistance(earthPosition, spaceShipPosition)),
-                (spaceShipPosition.getX() - earthPosition.getX()) / Particle.getDistance(earthPosition, spaceShipPosition));
+        Point<Double> tangentialVersor = new Point<>(Math.abs((spaceShipPosition.getY() - earthPosition.getY()) / Particle.getDistance(earthPosition, spaceShipPosition)),
+                Math.abs((spaceShipPosition.getX() - earthPosition.getX()) / Particle.getDistance(earthPosition, spaceShipPosition)));
 
-        particleManager.getParticleList().get(SPACESHIP_INDEX).setVelocity(new Point<>(earthVelocity.getX() + tangentialVersor.getX() * velocity,
-                earthVelocity.getY() + tangentialVersor.getY() * velocity));
+        particleManager.getParticleList().get(SPACESHIP_INDEX).setVelocity(new Point<>(earthVelocity.getX() + Math.signum(earthVelocity.getX()) * tangentialVersor.getX() * velocity,
+                earthVelocity.getY() + Math.signum(earthVelocity.getY()) * tangentialVersor.getY() * velocity));
     }
 
     public void findShortestDistance(final double height) {
