@@ -11,7 +11,13 @@ import java.util.List;
 @Singleton
 public class ParticleManager {
 
-    private final List<Particle> particleList = new ArrayList<>();
+    private List<Particle> particleList = new ArrayList<>();
+
+    private static final int SUN_ID = 1;
+    private static final int EARTH_ID = 2;
+    private static final int SATURN_ID = 3;
+    private static final int JUPITER_ID = 4;
+    private static final int SHIP_ID = 5;
 
     public boolean addParticle(final Particle p) {
         return particleList.add(p);
@@ -25,5 +31,44 @@ public class ParticleManager {
         for (Particle particle : particleList)
             particle.update(forces);
 
+    }
+
+    void resetParticlesList(){
+        particleList.clear();
+    }
+
+    Particle getEarth(){
+        for (Particle particle : particleList)
+            if (particle.getId().equals(EARTH_ID))
+                return particle;
+        return null;
+    }
+
+    Particle getJupiter(){
+        for (Particle particle : particleList)
+            if (particle.getId().equals(SATURN_ID))
+                return particle;
+        return null;
+    }
+
+    Particle getSaturn(){
+        for (Particle particle : particleList)
+            if (particle.getId().equals(JUPITER_ID))
+                return particle;
+        return null;
+    }
+
+    Particle getShip(){
+        for (Particle particle : particleList)
+            if (particle.getId().equals(SHIP_ID))
+                return particle;
+        return null;
+    }
+
+    Particle getSun(){
+        for (Particle particle : particleList)
+            if (particle.getId().equals(SUN_ID))
+                return particle;
+        return null;
     }
 }
