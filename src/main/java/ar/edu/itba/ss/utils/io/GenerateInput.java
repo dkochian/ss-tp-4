@@ -147,7 +147,7 @@ public class GenerateInput {
                 aux.add(planetsAux.get(obj).get(obj2));
             }
             planetsMap.put("planets", aux);
-            final Path p = Paths.get("input-" + obj + ".json");
+            final Path p = Paths.get(ioManager.getConfiguration().getInputDirectory() + "/input-" + obj + ".json");
 
             if (Files.exists(p)) {
                 try {
