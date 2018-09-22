@@ -1,6 +1,8 @@
 package ar.edu.itba.ss.entities;
 
 public class Configuration {
+    private static final int MAX_RANGE_DAYS = 15;
+
     //General
     private final String outputDirectory;
     private final String outputFilename;
@@ -17,12 +19,17 @@ public class Configuration {
     private final double dVelocity;
     private final String[] schemas;
 
+    //Dates
+    private final boolean generateInput;
+    private final int rangeDays;
+
     //Animation
     private final int print;
 
     public Configuration(String outputDirectory, String outputFilename, String inputDirectory, String inputFilename,
                          int dt, int duration, double dAltitude, int tAltitude, double initialVelocity,
-                         double finalVelocity, double dVelocity, String[] schemas, int print) {
+                         double finalVelocity, double dVelocity, String[] schemas, boolean generateInput,
+                         int rangeDays, int print) {
         this.outputDirectory = outputDirectory;
         this.outputFilename = outputFilename;
         this.inputDirectory = inputDirectory;
@@ -35,6 +42,11 @@ public class Configuration {
         this.finalVelocity = finalVelocity;
         this.dVelocity = dVelocity;
         this.schemas = schemas;
+        this.generateInput = generateInput;
+        if (Math.abs(rangeDays) > MAX_RANGE_DAYS)
+            this.rangeDays = Math.abs(rangeDays);
+        else
+            this.rangeDays = 0;
         this.print = print;
     }
 
@@ -86,6 +98,14 @@ public class Configuration {
         return schemas;
     }
 
+    public boolean isGenerateInput() {
+        return generateInput;
+    }
+
+    public int getRangeDays() {
+        return rangeDays;
+    }
+
     public int getPrint() {
         return print;
     }
@@ -107,10 +127,14 @@ public class Configuration {
         final double dVelocity = 4000;
         final String[] schemas = new String[]{"Beeman", "Verlet"};
 
+        //Dates
+        final boolean generateInput = false;
+        final int rangeDays = 0;
+
         //Animation
         final int print = 60 * 24;
 
         return new Configuration(outputDirectory, outputFilename, inputDirectory, inputFilename, dt, duration,
-                dAltitude, tAltitude, initialVelocity, finalVelocity, dVelocity, schemas, print);
+                dAltitude, tAltitude, initialVelocity, finalVelocity, dVelocity, schemas, generateInput, rangeDays, print);
     }
 }
