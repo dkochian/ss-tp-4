@@ -128,8 +128,8 @@ public class SimulationManager {
             }
         }
 
-        System.out.println("To Jupiter Day of min distance: " + tOfLessDistanceJupiter / DAY + ". Distance: " + distanceToJupiter);
-        System.out.println("To Saturn Day of min distance: " + tOfLessDistanceSaturn / DAY + ". Distance: " + distanceToSaturn);
+        System.out.println("To Jupiter" + "\n\tMin distance: " + distanceToJupiter +  "\n\tTime: " + ((int)(tOfLessDistanceJupiter/YEAR)) + " years " + ((int)((tOfLessDistanceJupiter%YEAR)/DAY)) + " days");
+        System.out.println("To Saturn" + "\n\tMin distance: " + distanceToSaturn +  "\n\tTime: " + ((int)(tOfLessDistanceSaturn/YEAR)) + " years " + ((int)((tOfLessDistanceSaturn%YEAR)/DAY)) + " days");
     }
 
     public List<Double> findDistances(double finalDay, double height) {
@@ -152,9 +152,6 @@ public class SimulationManager {
 
         while (elapsed <= ioManager.getConfiguration().getDuration() && crashedWith == null && elapsed < DAY * finalDay) {
             elapsed += simulate();
-
-
-
 
             double newDistanceJupiter = distanceToJupiter();
             if (newDistanceJupiter < minDistanceToJupiter) {

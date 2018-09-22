@@ -85,7 +85,7 @@ public class Configuration {
 
         //Oscillator
         final int dt = 60;
-        final int duration = 60*60*24*365*40;
+        final int duration = 60*60*24*365*5;
         final double dAltitude = 1000000;
         final int tAltitude = 10000000;
         final double velocity = 15000;
