@@ -40,14 +40,14 @@ public class ParticleManager {
 
     Particle getJupiter(){
         for (Particle particle : particleList)
-            if (particle.getId().equals(SATURN_ID))
+            if (particle.getId().equals(JUPITER_ID))
                 return particle;
         return null;
     }
 
     Particle getSaturn(){
         for (Particle particle : particleList)
-            if (particle.getId().equals(JUPITER_ID))
+            if (particle.getId().equals(SATURN_ID))
                 return particle;
         return null;
     }
