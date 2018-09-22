@@ -16,19 +16,24 @@ public class Main {
         final SimulationManager simulationManager = InjectorManager.getInjector().getInstance(SimulationManager.class);
         final OutputWriter outputWriter = InjectorManager.getInjector().getInstance(OutputWriter.class);
 
-        for (double height = Particle.EARTH_RADIUS;
-             height <  Particle.EARTH_RADIUS + ioManager.getConfiguration().gettAltitude();
-             height += ioManager.getConfiguration().getdAltitude()) {
+        for (double velocity = ioManager.getConfiguration().getInitialVelocity();
+             velocity < ioManager.getConfiguration().getFinalVelocity();
+             velocity += ioManager.getConfiguration().getdVelocity()) {
 
-            double orbitalHeight = (height - Particle.EARTH_RADIUS)/1000;
+            for (double height = Particle.EARTH_RADIUS;
+                 height < Particle.EARTH_RADIUS + ioManager.getConfiguration().gettAltitude();
+                 height += ioManager.getConfiguration().getdAltitude()) {
 
-            logger.info("Running simulation for orbital height: " + orbitalHeight + " km");
+                double orbitalHeight = (height - Particle.EARTH_RADIUS) / 1000;
 
-            simulationManager.setSpaceShip(height, ioManager.getConfiguration().getVelocity());
-            outputWriter.remove(String.valueOf(orbitalHeight));
+                logger.info("Running simulation for orbital height: " + orbitalHeight + " km, and velocity: " + velocity/1000 + " km/s.");
 
-            simulationManager.findShortestDistance(height);
-            simulationManager.reset();
+                simulationManager.setSpaceShip(height, velocity);
+                outputWriter.remove(String.valueOf(orbitalHeight));
+
+                simulationManager.findShortestDistance(height, velocity);
+                simulationManager.reset();
+            }
         }
     }
 }

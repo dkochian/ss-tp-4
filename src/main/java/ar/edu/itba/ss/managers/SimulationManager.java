@@ -97,7 +97,7 @@ public class SimulationManager {
                 earthVelocity.getY() + Math.signum(earthVelocity.getY()) * tangentialVersor.getY() * velocity));
     }
 
-    public void findShortestDistance(final double height) {
+    public void findShortestDistance(final double height, final double velocity) {
 
         double distanceToJupiter = Particle.getDistance(particleManager.getSpaceShip().getPosition(), particleManager.getJupiter().getPosition());
         double distanceToSaturn = Particle.getDistance(particleManager.getSpaceShip().getPosition(), particleManager.getSaturn().getPosition());
@@ -110,7 +110,7 @@ public class SimulationManager {
 
             if (elapsed % ioManager.getConfiguration().getPrint() == 0) {
                 try {
-                    outputWriter.write(String.valueOf((height - Particle.EARTH_RADIUS)/1000));
+                    outputWriter.write(String.valueOf((height - Particle.EARTH_RADIUS) / 1000) + "-" + String.valueOf(velocity / 1000));
                 } catch (IOException e) {
                     logger.error(e.getMessage());
                 }
@@ -128,78 +128,7 @@ public class SimulationManager {
             }
         }
 
-        System.out.println("To Jupiter" + "\n\tMin distance: " + distanceToJupiter +  "\n\tTime: " + ((int)(tOfLessDistanceJupiter/YEAR)) + " years " + ((int)((tOfLessDistanceJupiter%YEAR)/DAY)) + " days");
-        System.out.println("To Saturn" + "\n\tMin distance: " + distanceToSaturn +  "\n\tTime: " + ((int)(tOfLessDistanceSaturn/YEAR)) + " years " + ((int)((tOfLessDistanceSaturn%YEAR)/DAY)) + " days");
+        System.out.println("To Jupiter" + "\n\tMin distance: " + distanceToJupiter + "\n\tTime: " + ((int) (tOfLessDistanceJupiter / YEAR)) + " years " + ((int) ((tOfLessDistanceJupiter % YEAR) / DAY)) + " days");
+        System.out.println("To Saturn" + "\n\tMin distance: " + distanceToSaturn + "\n\tTime: " + ((int) (tOfLessDistanceSaturn / YEAR)) + " years " + ((int) ((tOfLessDistanceSaturn % YEAR) / DAY)) + " days");
     }
-
-    public List<Double> findDistances(double finalDay, double height) {
-        final Particle earth = particleManager.getEarth();
-        final Particle jupiter = particleManager.getJupiter();
-        final Particle saturn = particleManager.getSaturn();
-        final Particle ship = particleManager.getSpaceShip();
-
-        double originalDistanceToJupiter = distanceToJupiter();
-
-        double minDistanceToJupiter = Particle.getDistance(earth.getPosition(), jupiter.getPosition());
-        double minDistanceToSaturn = Particle.getDistance(earth.getPosition(), saturn.getPosition());
-        double dtOfMinDistance = 0;
-        double earthToJupiter = minDistanceToJupiter - (earth.getRadius() + jupiter.getRadius());
-        double earthToSaturn = minDistanceToSaturn - (earth.getRadius() + saturn.getRadius());
-
-        int elapsed = 0;
-
-        Particle crashedWith = null;
-
-        while (elapsed <= ioManager.getConfiguration().getDuration() && crashedWith == null && elapsed < DAY * finalDay) {
-            elapsed += simulate();
-
-            double newDistanceJupiter = distanceToJupiter();
-            if (newDistanceJupiter < minDistanceToJupiter) {
-                minDistanceToJupiter = newDistanceJupiter;
-                dtOfMinDistance = elapsed;
-            }
-
-            double newDistanceEarthJupiter = Particle.getDistance(earth.getPosition(), jupiter.getPosition()) - (earth.getRadius() + jupiter.getRadius());
-            if (newDistanceEarthJupiter < earthToJupiter) {
-                earthToJupiter = newDistanceEarthJupiter;
-            }
-
-            crashedWith = hasCrashed(height);
-        }
-
-        double finalVelocity = Math.sqrt(Math.pow((ship.getVelocity().getX() - jupiter.getVelocity().getX()), 2) +
-                Math.pow((ship.getVelocity().getY() - jupiter.getVelocity().getY()), 2));
-
-        List<Double> answer = new ArrayList<>();
-
-        answer.add(minDistanceToJupiter);
-        answer.add(originalDistanceToJupiter);
-        answer.add(finalVelocity);
-        answer.add(dtOfMinDistance / DAY);
-
-        if (minDistanceToJupiter == originalDistanceToJupiter || (dtOfMinDistance / DAY) <= 0.9) {
-            return null;
-        }
-
-        if (crashedWith != null) answer.add(Double.valueOf(crashedWith.getId()));
-
-        return answer;
-    }
-
-    private double distanceToJupiter() {
-        return Particle.getDistance(particleManager.getSpaceShip().getPosition(), particleManager.getJupiter().getPosition()) - particleManager.getJupiter().getRadius();
-    }
-
-    private Particle hasCrashed(double height) {
-        final Particle sun = particleManager.getSun();
-        final Particle earth = particleManager.getEarth();
-        final Particle ship = particleManager.getSpaceShip();
-        if (Particle.getDistance(ship.getPosition(), sun.getPosition()) < (ship.getRadius() + sun.getRadius() + height)) {
-            return sun;
-        } else if(Particle.getDistance(ship.getPosition(), earth.getPosition()) < (ship.getRadius() + earth.getRadius()))
-            return earth;
-
-        return null;
-    }
-
 }

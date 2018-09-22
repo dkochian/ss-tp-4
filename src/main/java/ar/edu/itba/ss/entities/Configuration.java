@@ -12,15 +12,17 @@ public class Configuration {
     private final int duration;
     private final double dAltitude;
     private final int tAltitude;
-    private final double velocity;
+    private final double initialVelocity;
+    private final double finalVelocity;
+    private final double dVelocity;
     private final String[] schemas;
 
     //Animation
     private final int print;
 
     public Configuration(String outputDirectory, String outputFilename, String inputDirectory, String inputFilename,
-                         int dt, int duration, double dAltitude, int tAltitude, double velocity,
-                         String[] schemas, int print) {
+                         int dt, int duration, double dAltitude, int tAltitude, double initialVelocity,
+                         double finalVelocity, double dVelocity, String[] schemas, int print) {
         this.outputDirectory = outputDirectory;
         this.outputFilename = outputFilename;
         this.inputDirectory = inputDirectory;
@@ -29,7 +31,9 @@ public class Configuration {
         this.duration = duration;
         this.dAltitude = dAltitude;
         this.tAltitude = tAltitude;
-        this.velocity = velocity;
+        this.initialVelocity = initialVelocity;
+        this.finalVelocity = finalVelocity;
+        this.dVelocity = dVelocity;
         this.schemas = schemas;
         this.print = print;
     }
@@ -66,7 +70,17 @@ public class Configuration {
         return tAltitude;
     }
 
-    public double getVelocity() { return velocity; }
+    public double getInitialVelocity() {
+        return initialVelocity;
+    }
+
+    public double getFinalVelocity() {
+        return finalVelocity;
+    }
+
+    public double getdVelocity() {
+        return dVelocity;
+    }
 
     public String[] getSchemas() {
         return schemas;
@@ -83,18 +97,20 @@ public class Configuration {
         final String inputDirectory = "input";
         final String inputFilename = "input.json";
 
-        //Oscillator
+        //Gravity System
         final int dt = 60;
-        final int duration = 60*60*24*365*5;
+        final int duration = 60 * 60 * 24 * 365 * 5;
         final double dAltitude = 1000000;
         final int tAltitude = 10000000;
-        final double velocity = 15000;
+        final double initialVelocity = 1000;
+        final double finalVelocity = 20000;
+        final double dVelocity = 4000;
         final String[] schemas = new String[]{"Beeman", "Verlet"};
 
         //Animation
-        final int print = 60*24;
+        final int print = 60 * 24;
 
         return new Configuration(outputDirectory, outputFilename, inputDirectory, inputFilename, dt, duration,
-                dAltitude, tAltitude, velocity, schemas, print);
+                dAltitude, tAltitude, initialVelocity, finalVelocity, dVelocity, schemas, print);
     }
 }
