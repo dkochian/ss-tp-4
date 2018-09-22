@@ -4,6 +4,7 @@ import ar.edu.itba.ss.entities.Particle;
 import ar.edu.itba.ss.managers.IOManager;
 import ar.edu.itba.ss.managers.InjectorManager;
 import ar.edu.itba.ss.managers.SimulationManager;
+import ar.edu.itba.ss.utils.io.GenerateInput;
 import ar.edu.itba.ss.utils.io.OutputWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,24 +17,36 @@ public class Main {
         final SimulationManager simulationManager = InjectorManager.getInjector().getInstance(SimulationManager.class);
         final OutputWriter outputWriter = InjectorManager.getInjector().getInstance(OutputWriter.class);
 
-        for (double velocity = ioManager.getConfiguration().getInitialVelocity();
-             velocity < ioManager.getConfiguration().getFinalVelocity();
-             velocity += ioManager.getConfiguration().getdVelocity()) {
+        int middleDayInput;
 
-            for (double height = Particle.EARTH_RADIUS;
-                 height < Particle.EARTH_RADIUS + ioManager.getConfiguration().gettAltitude();
-                 height += ioManager.getConfiguration().getdAltitude()) {
+        if (ioManager.getConfiguration().isGenerateInput())
+            middleDayInput = InjectorManager.getInjector().getInstance(GenerateInput.class).generateInput();
+        else
+            middleDayInput = -1;
 
-                double orbitalHeight = (height - Particle.EARTH_RADIUS) / 1000;
+        final int rangeDays = ioManager.getConfiguration().getRangeDays();
+        int startDay = middleDayInput == -1 ? 0 : middleDayInput - rangeDays;
 
-                logger.info("Running simulation for orbital height: " + orbitalHeight + " km, and velocity: " + velocity/1000 + " km/s.");
+        //for (int i = startDay; i < middleDayInput + rangeDays; i++) {
+            for (double velocity = ioManager.getConfiguration().getInitialVelocity();
+                 velocity < ioManager.getConfiguration().getFinalVelocity();
+                 velocity += ioManager.getConfiguration().getdVelocity()) {
 
-                simulationManager.setSpaceShip(height, velocity);
-                outputWriter.remove(String.valueOf(orbitalHeight));
+                for (double height = Particle.EARTH_RADIUS;
+                     height < Particle.EARTH_RADIUS + ioManager.getConfiguration().gettAltitude();
+                     height += ioManager.getConfiguration().getdAltitude()) {
 
-                simulationManager.findShortestDistance(height, velocity);
-                simulationManager.reset();
+                    double orbitalHeight = (height - Particle.EARTH_RADIUS) / 1000;
+
+                    logger.info("Running simulation for orbital height: " + orbitalHeight + " km, and velocity: " + velocity / 1000 + " km/s.");
+
+                    simulationManager.setSpaceShip(height, velocity);
+                    outputWriter.remove(String.valueOf(orbitalHeight));
+
+                    simulationManager.findShortestDistance(height, velocity);
+                    simulationManager.reset();
+                }
             }
-        }
+        //}
     }
 }
