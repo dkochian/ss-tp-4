@@ -22,12 +22,14 @@ public class Main {
         if (ioManager.getConfiguration().isGenerateInput())
             middleDayInput = InjectorManager.getInjector().getInstance(GenerateInput.class).generateInput();
         else
-            middleDayInput = -1;
+            middleDayInput = ioManager.inputDay(ioManager.getConfiguration().getInputDirectory());
 
         final int rangeDays = ioManager.getConfiguration().getRangeDays();
         int startDay = middleDayInput == -1 ? 0 : middleDayInput - rangeDays;
 
-        //for (int i = startDay; i < middleDayInput + rangeDays; i++) {
+        for (int i = startDay; i <= middleDayInput + rangeDays; i++) {
+            String fileName = "input-" + i + ".json";
+            simulationManager.reset(fileName);
             for (double velocity = ioManager.getConfiguration().getInitialVelocity();
                  velocity < ioManager.getConfiguration().getFinalVelocity();
                  velocity += ioManager.getConfiguration().getdVelocity()) {
@@ -38,15 +40,15 @@ public class Main {
 
                     double orbitalHeight = (height - Particle.EARTH_RADIUS) / 1000;
 
-                    logger.info("Running simulation for orbital height: " + orbitalHeight + " km, and velocity: " + velocity / 1000 + " km/s.");
+                    logger.info("Running simulation for " + fileName + ", orbital height: " + orbitalHeight + " km, and velocity: " + velocity / 1000 + " km/s.");
 
                     simulationManager.setSpaceShip(height, velocity);
                     outputWriter.remove(String.valueOf(orbitalHeight));
 
                     simulationManager.findShortestDistance(height, velocity);
-                    simulationManager.reset();
+                    simulationManager.reset(fileName);
                 }
             }
-        //}
+        }
     }
 }

@@ -1,7 +1,6 @@
 package ar.edu.itba.ss.utils.io;
 
 import ar.edu.itba.ss.managers.IOManager;
-import ar.edu.itba.ss.managers.ParticleManager;
 import ar.edu.itba.ss.utils.other.Point;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -129,7 +128,7 @@ public class GenerateInput {
                 infoPlanetSaturn.put("acceleration", new Point<>(0.0, 0.0));
                 infoPlanets.put(SATURN_INDEX, infoPlanetSaturn);
 
-                logger.info(saturn[0]  + " input generated.");
+                logger.info(saturn[0] + " input generated.");
                 planetsAux.put(count++, infoPlanets);
 
             }
@@ -163,6 +162,6 @@ public class GenerateInput {
                 e.printStackTrace();
             }
         }
-        return (int) Math.floor(size/2.0);
+        return (int) Math.floor(size / 2.0);
     }
 }

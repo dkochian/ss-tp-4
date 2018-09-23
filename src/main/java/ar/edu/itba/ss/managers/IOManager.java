@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Singleton;
 import java.io.*;
+import java.util.Objects;
 
 @Singleton
 public class IOManager {
@@ -38,9 +39,10 @@ public class IOManager {
         return configuration;
     }
 
-    public InputData getInputData() {
+    InputData getInputData(final String fileName) {
         if (inputData == null) {
-            final String path = getConfiguration().getInputDirectory() + '/' + getConfiguration().getInputFilename();
+            final String path = getConfiguration().getInputDirectory() + '/' + fileName;
+
             try {
                 logger.debug("Loading configuration");
                 inputData = read(path,
@@ -53,7 +55,7 @@ public class IOManager {
         return inputData;
     }
 
-    public void reload() {
+    void reload() {
         inputData = null;
         configuration = null;
     }
@@ -83,5 +85,9 @@ public class IOManager {
                 if (!file.mkdirs())
                     throw new RuntimeException("Couldn't create the folder: " + folder);
         }
+    }
+
+    public int inputDay(final String path){
+        return (int) Math.floor(Objects.requireNonNull(new File(path).listFiles((dir, name) -> name.endsWith(".json"))).length /2.0);
     }
 }
