@@ -17,8 +17,8 @@ public class SimulationManager {
     private static final double G = 6.693E-11;
 
     public static final double DAY = 24 * 3600.0;
-    private static final double WEEK = DAY * 7;
-    private static final double MONTH = DAY * 31;
+    public static final double WEEK = DAY * 7;
+    public static final double MONTH = DAY * 31;
     public static final double YEAR = DAY * 365;
 
     private String actualFileName;

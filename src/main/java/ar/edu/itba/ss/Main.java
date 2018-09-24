@@ -34,8 +34,8 @@ public class Main {
                  velocity < ioManager.getConfiguration().getFinalVelocity();
                  velocity += ioManager.getConfiguration().getdVelocity()) {
 
-                for (double height = Particle.EARTH_RADIUS;
-                     height < Particle.EARTH_RADIUS + ioManager.getConfiguration().gettAltitude();
+                for (double height = Particle.EARTH_RADIUS + ioManager.getConfiguration().getInitialAltitude();
+                     height < Particle.EARTH_RADIUS + ioManager.getConfiguration().getFinalAltitude();
                      height += ioManager.getConfiguration().getdAltitude()) {
 
                     double orbitalHeight = (height - Particle.EARTH_RADIUS) / 1000;

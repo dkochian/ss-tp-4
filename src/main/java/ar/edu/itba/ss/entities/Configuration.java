@@ -13,7 +13,8 @@ public class Configuration {
     private final int dt;
     private final int duration;
     private final double dAltitude;
-    private final int tAltitude;
+    private final double initialAltitude;
+    private final double finalAltitude;
     private final double initialVelocity;
     private final double finalVelocity;
     private final double dVelocity;
@@ -27,7 +28,7 @@ public class Configuration {
     private final int print;
 
     public Configuration(String outputDirectory, String outputFilename, String inputDirectory, String inputFilename,
-                         int dt, int duration, double dAltitude, int tAltitude, double initialVelocity,
+                         int dt, int duration, double initialAltitude, double finalAltitude, double dAltitude, double initialVelocity,
                          double finalVelocity, double dVelocity, String[] schemas, boolean generateInput,
                          int rangeDays, int print) {
         this.outputDirectory = outputDirectory;
@@ -36,8 +37,9 @@ public class Configuration {
         this.inputFilename = inputFilename;
         this.dt = dt;
         this.duration = duration;
+        this.initialAltitude = initialAltitude;
+        this.finalAltitude = finalAltitude;
         this.dAltitude = dAltitude;
-        this.tAltitude = tAltitude;
         this.initialVelocity = initialVelocity;
         this.finalVelocity = finalVelocity;
         this.dVelocity = dVelocity;
@@ -78,8 +80,12 @@ public class Configuration {
         return dAltitude;
     }
 
-    public int gettAltitude() {
-        return tAltitude;
+    public double getInitialAltitude() {
+        return initialAltitude;
+    }
+
+    public double getFinalAltitude() {
+        return finalAltitude;
     }
 
     public double getInitialVelocity() {
@@ -120,11 +126,12 @@ public class Configuration {
         //Gravity System
         final int dt = 60;
         final int duration = 60 * 60 * 24 * 365 * 5;
-        final double dAltitude = 1000000;
-        final int tAltitude = 10000000;
-        final double initialVelocity = 1000;
-        final double finalVelocity = 20000;
-        final double dVelocity = 4000;
+        final double initialAltitude = 0.0;
+        final double finalAltitude = 10000000.0;
+        final double dAltitude = 1000000.0;
+        final double initialVelocity = 1000.0;
+        final double finalVelocity = 20000.0;
+        final double dVelocity = 4000.0;
         final String[] schemas = new String[]{"Beeman", "Verlet"};
 
         //Dates
@@ -134,7 +141,7 @@ public class Configuration {
         //Animation
         final int print = 60 * 24;
 
-        return new Configuration(outputDirectory, outputFilename, inputDirectory, inputFilename, dt, duration,
-                dAltitude, tAltitude, initialVelocity, finalVelocity, dVelocity, schemas, generateInput, rangeDays, print);
+        return new Configuration(outputDirectory, outputFilename, inputDirectory, inputFilename, dt, duration, initialAltitude,
+                finalAltitude, dAltitude, initialVelocity, finalVelocity, dVelocity, schemas, generateInput, rangeDays, print);
     }
 }
