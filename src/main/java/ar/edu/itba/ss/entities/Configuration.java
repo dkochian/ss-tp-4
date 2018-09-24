@@ -45,7 +45,7 @@ public class Configuration {
         this.dVelocity = dVelocity;
         this.schemas = schemas;
         this.generateInput = generateInput;
-        if (Math.abs(rangeDays) > MAX_RANGE_DAYS)
+        if (Math.abs(rangeDays) <= MAX_RANGE_DAYS)
             this.rangeDays = Math.abs(rangeDays);
         else
             this.rangeDays = 0;
@@ -135,7 +135,7 @@ public class Configuration {
         final String[] schemas = new String[]{"Beeman", "Verlet"};
 
         //Dates
-        final boolean generateInput = false;
+        final boolean generateInput = true;
         final int rangeDays = 0;
 
         //Animation
