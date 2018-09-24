@@ -103,9 +103,12 @@ public class SimulationManager {
         double distanceToSaturn = Particle.getDistance(particleManager.getSpaceShip().getPosition(), particleManager.getSaturn().getPosition());
         double tOfLessDistanceJupiter = 0;
         double tOfLessDistanceSaturn = 0;
-        int elapsed = 0;
+        long elapsed = 0;
 
         String day = actualFileName.substring(actualFileName.indexOf("-") + 1, actualFileName.indexOf("."));
+
+        outputWriter.remove("D:" + day
+                + "-L:" + String.valueOf((height - Particle.EARTH_RADIUS) / 1000) + "-V:" + String.valueOf(velocity / 1000));
 
         while (elapsed <= ioManager.getConfiguration().getDuration()) {
             elapsed += simulate();
